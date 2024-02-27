@@ -1,13 +1,13 @@
 ---
 # Display name
-title: 吳健雄
+title: Jiefeng Zhou
 
 # Name pronunciation (optional)
-name_pronunciation: Chien Shiung Wu
+# name_pronunciation: Chien Shiung Wu
 
 # Full name (for SEO)
-first_name: Shiung Wu
-last_name: Chien
+first_name: Jiefeng
+last_name: Zhou
 
 # Status emoji
 status:
@@ -17,34 +17,28 @@ status:
 superuser: true
 
 # Role/position/tagline
-role: Professor of Artificial Intelligence
+role: Junior student
 
 # Organizations/Affiliations to show in About widget
 organizations:
-  - name: Stanford University
-    url: https://www.stanford.edu/
+  - name: Yingcai Honors College, UESTC
+    url: https://www.uestc.edu.cn/
 
 # Short bio (displayed in user profile at end of posts)
-bio: My research interests include distributed robotics, mobile computing and programmable matter.
+bio: I am a highly self-motivated junior student with a strong background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. My research interests include information theory, artificial intelligence, and interdisciplinary research in them.
 
 # Interests to show in About widget
 interests:
+  - Information Theory
   - Artificial Intelligence
-  - Computational Linguistics
-  - Information Retrieval
+  - Interdisciplinary Research
 
 # Education to show in About widget
 education:
   courses:
-    - course: PhD in Artificial Intelligence
-      institution: Stanford University
-      year: 2012
-    - course: MEng in Artificial Intelligence
-      institution: Massachusetts Institute of Technology
-      year: 2009
-    - course: BSc in Artificial Intelligence
-      institution: Massachusetts Institute of Technology
-      year: 2008
+    - course: BSc in Mathematics-Physics Fundamental Science
+      institution: University of Electronic Science and Technology of China
+      year: 2021-now
 
 # Skills
 # For available icons, see: https://docs.hugoblox.com/getting-started/page-builder/#icons
@@ -52,28 +46,38 @@ skills:
   - name: Technical
     items:
       - name: Python
-        description: ''
+        description: 'Pytorch, Tensorflow(Basic)'
         percent: 80
         icon: python
         icon_pack: fab
-      - name: Data Science
+      - name: C
         description: ''
-        percent: 100
-        icon: chart-line
+        percent: 70
+        icon: code
         icon_pack: fas
-      - name: SQL
+      - name: Tex
         description: ''
-        percent: 40
-        icon: database
+        percent: 70
+        icon: overleaf
+        icon_pack: ai
+      - name: Matlab
+        description: ''
+        percent: 60
+        icon: cubes
+        icon_pack: fas
+      - name: Unix
+        description: ''
+        percent: 50
+        icon: terminal
         icon_pack: fas
   - name: Hobbies
     color: '#eeac02'
     color_border: '#f0bf23'
     items:
-      - name: Hiking
+      - name: Strolling
         description: ''
-        percent: 60
-        icon: person-hiking
+        percent: 70
+        icon: person-walking
         icon_pack: fas
       - name: Cats
         description: ''
@@ -85,6 +89,11 @@ skills:
         percent: 80
         icon: camera-retro
         icon_pack: fas
+      - name: Gaming
+        description: ''
+        percent: 40
+        icon: gamepad
+        icon_pack: fas
 
 # Social/Academic Networking
 # For available icons, see: https://docs.hugoblox.com/getting-started/page-builder/#icons
@@ -93,32 +102,26 @@ skills:
 social:
   - icon: envelope
     icon_pack: fas
-    link: '/#contact'
-  - icon: twitter
-    icon_pack: fab
-    link: https://twitter.com/GeorgeCushen
-    label: Follow me on Twitter
-    display:
-      header: true
+    link: mailto:zhoujiefenguestc@outlook.com
   - icon: graduation-cap # Alternatively, use `google-scholar` icon from `ai` icon pack
     icon_pack: fas
-    link: https://scholar.google.co.uk/citations?user=sIwtMXoAAAAJ
+    link: https://scholar.google.co.uk/citations?user=91LXriwAAAAJ
   - icon: github
     icon_pack: fab
-    link: https://github.com/gcushen
-  - icon: linkedin
+    link: https://github.com/jeffeychou
+  - icon: orcid
     icon_pack: fab
-    link: https://www.linkedin.com/
+    link: https://orcid.org/0009-0003-0424-2381
   # Link to a PDF of your resume/CV.
   # To use: copy your resume to `static/uploads/resume.pdf`, enable `ai` icons in `params.yaml`,
   # and uncomment the lines below.
   - icon: cv
     icon_pack: ai
-    link: uploads/resume.pdf
+    link: uploads/cv.pdf
 
 # Highlight the author in author lists? (true/false)
 highlight_name: true
 ---
 
-Chien Shiung Wu is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+I am a highly self-motivated junior student with a strong background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. I am now seeking opportunities to contribute technical or theoretical expertise in interdisciplinary research in artificial intelligence as an intern, building a solid foundation for my future career as a research professor.
 {style="text-align: justify;"}

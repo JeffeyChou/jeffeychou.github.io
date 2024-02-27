@@ -1,4 +1,4 @@
----
+ ---
 # Display name
 title: Jiefeng Zhou
 
@@ -70,29 +70,24 @@ skills:
         percent: 50
         icon: terminal
         icon_pack: fas
-  - name: Hobbies
+  - name: Grades & Languages
     color: '#eeac02'
     color_border: '#f0bf23'
     items:
-      - name: Strolling
-        description: ''
-        percent: 70
-        icon: person-walking
+      - name: GPA
+        description: 'Overall GPA: 3.86/4'
+        percent: 97
+        icon: graduation-cap
         icon_pack: fas
-      - name: Cats
-        description: ''
+      - name: Mandarin
+        description: 'Native speaker'
         percent: 100
-        icon: cat
+        icon: language
         icon_pack: fas
-      - name: Photography
-        description: ''
-        percent: 80
-        icon: camera-retro
-        icon_pack: fas
-      - name: Gaming
-        description: ''
-        percent: 40
-        icon: gamepad
+      - name: English
+        description: 'TOEFL: 102; GRE: 316'
+        percent: 85
+        icon: e
         icon_pack: fas
 
 # Social/Academic Networking
@@ -123,5 +118,5 @@ social:
 highlight_name: true
 ---
 
-I am a highly self-motivated junior student with a strong background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. I am now seeking opportunities to contribute technical or theoretical expertise in interdisciplinary research in artificial intelligence as an intern, building a solid foundation for my future career as a research professor.
+I am a junior student with a background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. I am now seeking opportunities to contribute technical or theoretical expertise in interdisciplinary research in artificial intelligence as an intern, building a solid foundation for my future career as a research professor.
 {style="text-align: justify;"}

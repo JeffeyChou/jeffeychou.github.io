@@ -73,7 +73,7 @@ sections:
           description: |2-
 
               * Under the supervision of Prof. Yong Deng at IFFS, UESTC
-              * Research focuses on information fusion theory, specialize in evidence theory, including entropy, information volume and Random Permutation Set
+              * Research focuses on information theory, specialize in Dempster-Shafer theory, including entropy, information volume and Random Permutation Set
               * Currently I have one publication, with two manuscripts under review. For details, please refer to my [CV](uploads/cv.pdf).
 
         - title: Artificial Intelligence Laboratory Summer Program
@@ -204,7 +204,7 @@ sections:
   - block: collection
     id: recent_works
     content:
-      title: Publications
+      title: Recent Works
       # text: |-
       #   {{% callout note %}}
       #   Quickly discover relevant content by [filtering publications](./publication/).
@@ -212,7 +212,7 @@ sections:
       filters:
         folders:
           - publication
-        exclude_featured: true
+        exclude_featured: false
     design:
       columns: '2'
       view: citation

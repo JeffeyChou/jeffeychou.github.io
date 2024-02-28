@@ -25,13 +25,13 @@ organizations:
     url: https://www.uestc.edu.cn/
 
 # Short bio (displayed in user profile at end of posts)
-bio: I am a highly self-motivated junior student with a strong background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. My research interests include information theory, artificial intelligence, and interdisciplinary research in them.
+bio: BSc in Mathematics-Physics Fundamental Science (Elite Undergraduate Program, Yingcai Honors College, UESTC).
 
 # Interests to show in About widget
 interests:
   - Information Theory
   - Artificial Intelligence
-  - Interdisciplinary Research
+  - Interdisciplinary Research in AI
 
 # Education to show in About widget
 education:
@@ -80,7 +80,7 @@ skills:
         icon: graduation-cap
         icon_pack: fas
       - name: Mandarin
-        description: 'Native speaker'
+        description: 'Native'
         percent: 100
         icon: language
         icon_pack: fas
@@ -118,5 +118,5 @@ social:
 highlight_name: true
 ---
 
-I am a junior student with a background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. I am now seeking opportunities to contribute technical or theoretical expertise in interdisciplinary research in artificial intelligence as an intern, building a solid foundation for my future career as a research professor.
+I am a junior student with a background in Mathematics, Physics, and artificial intelligence, passionate about ensuring explainable AI. I am now seeking opportunities to contribute technical or theoretical expertise in interdisciplinary research in artificial intelligence as an intern, building a solid foundation for my future career as a research faculty.
 {style="text-align: justify;"}

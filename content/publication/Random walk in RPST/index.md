@@ -1,11 +1,10 @@
 ---
-title: "Limit of the Maximum Random Permutation Set Entropy"
+title: "Random Walk in Random Permutation Set Theory"
 authors:
 - admin
 - Zhen Li
-- Kang Hao Cheong
 - Yong Deng
-date: "2024-01-07T00:00:00Z"
+date: "2024-04-07T00:00:00Z"
 doi: ""
 # draft: true
 
@@ -21,28 +20,25 @@ publication_types: ["manuscript"]
 publication: ""
 publication_short: ""
 
-abstract: The Random Permutation Set (RPS) is a new type of set proposed recently, which can be regarded as the generalization of evidence theory. To measure the uncertainty of RPS, the entropy of RPS and its corresponding maximum entropy have been proposed. Exploring the maximum entropy provides a possible way of understanding the physical meaning of RPS. In this paper, a new concept, the envelope of entropy function, is defined. In addition, the limit of the envelope of RPS entropy is derived and proved. Compared with the existing method, the computational complexity of the proposed method to calculate the envelope of RPS entropy decreases greatly. The result shows that when n \to \infty, the limit form of the envelope of the entropy of RPS converges to e(n!)^2, which is highly connected to the constant $e$ and factorial. Finally, numerical examples validate the efficiency and conciseness of the proposed envelope, which provides a new insight into the maximum entropy function.
+abstract: Random walk is an explainable approach for modeling natural processes at the molecular level. The Random Permutation Set Theory (RPST) serves as a framework for uncertainty reasoning, extending the applicability of Dempster-Shafer Theory. Recent explorations indicate a promising link between RPST and random walk. In this study, we conduct an analysis and construct a random walk model based on the properties of RPST, with Monte Carlo simulations of such random walk. Our findings reveal that the random walk generated through RPST exhibits characteristics similar to those of a Gaussian random walk and can be transformed into a Wiener process through a specific limiting scaling procedure. This investigation establishes a novel connection between RPST and random walk theory, thereby not only expanding the applicability of RPST, but also demonstrating the potential for combining the strengths of both approaches to improve problem-solving abilities.
 
 
 # Summary. An optional shortened abstract.
-summary: Derive and Validate the limit of maximum Random Permutation Set Entropy is e(n!)^2, which is an efficientapproximation for computing maximum Random Permutation Set Entropy
+summary: We derived and validated that random walk could generated through some proprieties of Random Permutation Set Theory (RPST), and can be transformed into a generalized continuous random walk. This investigation establishes a novel connection between RPST and random walk theory.
 
 tags:
-- Shannon entropy
-- Deng entropy
-- Dempster–Shafer evidence theory
-- Approximation
 - Random permutation set
-- Maximum entropy
+- Random walks
+- Stochastic processes
+- Wiener process
+- Probability theory
 featured: false
-
-
 
 
 links:
 # - name: Custom Link
 #   url: http://example.org
-url_pdf: https://arxiv.org/abs/2403.06206
+url_pdf: https://arxiv.org/abs/2404.03978
 # url_code: 'https://github.com/HugoBlox/hugo-blox-builder'
 # url_dataset: '#'
 # url_poster: '#'
@@ -82,10 +78,3 @@ Create your slides in Markdown - click the *Slides* button to check out the exam
 
 Add the publication's **full text** or **supplementary notes** here. You can use rich formatting such as including [code, math, and images](https://docs.hugoblox.com/content/writing-markdown-latex/). -->
 
-
-## Highlights
-1. The envelope of entropy is defined
-2. The limit of the envelope of RPS entropy is derived and proved
-3. The limit e(n!)^2 may reveal the meaning of Random Permutation Set in the future
-
-The manuscript is submitted to Physica A: Statistical Mechanics and its Applications.

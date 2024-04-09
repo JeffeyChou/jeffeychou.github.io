@@ -74,7 +74,7 @@ sections:
 
               * Under the supervision of Prof. Yong Deng at IFFS, UESTC
               * Research focuses on information theory, specialize in Dempster-Shafer theory, including entropy, information volume and Random Permutation Set
-              * Currently I have one publication, with two manuscripts under review. For details, please refer to my [CV](uploads/cv.pdf).
+              * Currently I have one publication, with three manuscripts under review. Please refer to my [CV](uploads/cv.pdf) for more details.
 
         - title: Artificial Intelligence Laboratory Summer Program
           company: Group Leader
@@ -83,7 +83,11 @@ sections:
           location: NTU, Singapore
           date_start: '2023-07-19'
           date_end: '2023-07-31'
-          description: Study and explore medical image processing.
+          description: |2-
+
+              * Studied and explore medical image processing.
+              * Presenter of my group's project.
+              * Attained a distinction overall grade.
     design:
       columns: '2'
   # - block: accomplishments

@@ -2,24 +2,25 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: <a href='https://en.uestc.edu.cn/'>UESTC</a>. Chengdu, China. <a href='mailto:jiefeng.zhou@hotmail.com'>jiefeng.zhou@hotmail.com</a>.  
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>No.2006, Xiyuan Ave.</p>
+    <p>West Hi-Tech Zone, 611731</p>
+    <p>Chengdu, Sichuan Province, China</p>
+
 
 news: true # includes a list of news items
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+I am an undergraduate student at the University of Electronic Science and Technology of China (UESTC), majoring in Mathematics-Physics Fundamental Science within the Yingcai Honors College. My academic interests lie in the areas of information theory, X-AI and theoretical machine learning.
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+My research experience includes working as a Research Assistant at the University of California, Riverside (UCR) and leading projects at the Information Fusion and Intelligent Systems Lab at UESTC. I have a strong publication record with papers in reputable journals such as Chaos, Expert Systems with Applications, and Chaos, Solitons & Fractals. My work spans topics like Random Permutation Set Theory, Generalized Information Entropy, and Information Volume of Mass Function.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+I am proficient in programming languages like Python and C, and familiar with machine learning frameworks such as PyTorch and TensorFlow.  I am always eager to explore new challenges and contribute to the advancement of knowledge in my fields of interest.

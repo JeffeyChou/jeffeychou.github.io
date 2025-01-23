@@ -1,200 +1,265 @@
 {
   "basics": {
-    "name": "Albert Einstein",
-    "label": "Scientist",
+    "name": "Jiefeng Zhou",
+    "role": "Senior Student",
     "image": "",
-    "email": "albert@einstein.de",
-    "phone": "(912) 123-4567",
-    "url": "https://alshedivat.github.io/al-folio/",
-    "summary": "A German-born theoretical physicist, widely ranked among the greatest and most influential scientists of all time",
+    "email": "jiefeng.zhou@hotmail.com",
+    "phone": "(+86)-159-2802-0298",
+    "url": "https://github.com/JeffeyChou",
     "location": {
-      "address": "2712 Broadway St",
-      "postalCode": "CA 94115",
-      "city": "San Francisco",
-      "countryCode": "US",
-      "region": "California"
+      "address": "Chengdu",
+      "postalCode": 611731,
+      "city": "Chengdu",
+      "countryCode": "CN",
+      "region": "Sichuan"
     },
     "profiles": [
       {
-        "network": "Twitter",
-        "username": "AlbertEinstein",
-        "url": "https://twitter.com/AlbertEinstein"
+        "network": "Google Scholar",
+        "username": "Jiefeng Zhou",
+        "url": "https://scholar.google.com/citations?hl=en&user=91LXriwAAAAJ"
+      },
+      {
+        "network": "ORCID",
+        "username": "JeffeyChou",
+        "url": "https://orcid.org/0009-0003-0424-2381"
+      },
+      {
+        "network": "GitHub",
+        "username": "JeffeyChou",
+        "url": "https://github.com/JeffeyChou"
       }
     ]
   },
-  "work": [
-    {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
-      "highlights": ["Relativity"]
-    }
-  ],
+  "work": [],
   "volunteer": [
     {
-      "organization": "People's Climate March",
-      "location": "Zurich, Switzerland",
-      "position": "Lead Organizer",
-      "url": "https://example.com",
-      "startDate": "2014-04-01",
-      "endDate": "2015-07-01",
-      "summary": "Lead organizer for the New York City branch of the People's Climate March, the largest climate march in history.",
-      "highlights": ["Awarded 'Climate Hero' award by Greenpeace for my efforts organizing the march.", "Men of the year 2014 by Time magazine"]
+      "organization": "Expert Systems with Applications (Journal)",
+      "location": "Elsevier",
+      "position": "Peer Reviewer",
+      "url": "https://www.journals.elsevier.com/expert-systems-with-applications",
+      "startDate": "2023-12-01",
+      "endDate": "2023-12-31",
+      "summary": "Conducted peer review for one publication/grant for Expert Systems with Applications journal.",
+      "highlights": [
+        "Reviewed manuscript for Expert Systems with Applications journal."
+      ]
     }
   ],
   "education": [
     {
-      "institution": "University of Zurich, Zurich, Switzerland",
-      "location": "Zurich, Switzerland",
-      "url": "https://www.uzh.ch/",
-      "area": "Software Development",
-      "studyType": "PhD",
-      "startDate": "1905-01-01",
-      "endDate": "1905-01-01",
-      "score": "10",
-      "courses": ["Theory of Relativity"]
+      "institution": "University of Electronic Science and Technology of China (UESTC, 985 project)",
+      "location": "Chengdu, China",
+      "url": "https://en.uestc.edu.cn/",
+      "area": "Mathematics-Physics Fundamental Science (Elite Program@Yingcai Honors College)",
+      "studyType": "B.S. | GPA: 3.87/4.0",
+      "startDate": "2021-09-01",
+      "endDate": "2025-07-01",
+      "score": "3.87/4.00",
+      "courses": [
+        "Mathematics: Calculus, Algebra and Geometry, Numerical Analysis, Time Series Analysis, Stochastic Processes, Probability and Statistics",
+        "Physics: University Physics, Physical Experiment, Theoretical Mechanics, Quantum Mechanics",
+        "Computer Science: Data Structure and Algorithm, Machine Learning, Deep Learning, Reinforcement Learning"
+      ]
     }
   ],
   "awards": [
     {
-      "title": "Nobel Prize in Physics",
-      "date": "1921-11-01",
-      "awarder": "Royal Swedish Academy of Sciences",
-      "url": "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/",
-      "summary": "The Nobel Prizes are five separate prizes that, according to Alfred Nobel's will of 1895, are awarded to 'those who, during the preceding year, have conferred the greatest benefit to humankind.'"
+      "title": "National Grants * 3",
+      "date": "2024, 2023, 2022",
+      "awarder": "Sichuan Provincial Department of Education (National Level, Top 20%)",
+      "url": null,
+      "summary": null
+    },
+    {
+      "title": "Dream Scholarship",
+      "date": "2024-11-01",
+      "awarder": "China Education Development Foundation (National Level, Top 20%)",
+      "url": null,
+      "summary": null
+    },
+    {
+      "title": "Model Student Scholarship * 2",
+      "date": "2023, 2022",
+      "awarder": "UESTC (University Level, Top 30%)",
+      "url": null,
+      "summary": null
+    },
+    {
+      "title": "Top 7% | The 17th IEEExtreme Programming Competition",
+      "date": "2023-12-01",
+      "awarder": "IEEExtreme Programming Competition (Global Level)",
+      "url": null,
+      "summary": null
+    },
+    {
+      "title": "First Prize | The 23rd Mathematical Modeling Competition of UESTC",
+      "date": "2023-05-01",
+      "awarder": "UESTC (University Level, TOP 5%)",
+      "url": null,
+      "summary": null
+    },
+    {
+      "title": "First Prize | Sichuan College Students' Information Literacy Competition ",
+      "date": "2023-04-01",
+      "awarder": "Sichuan Provincial Department of Education (Provincial level, TOP 1%)",
+      "url": null,
+      "summary": null
     }
   ],
-  "certificates": [
-    {
-      "name": "Machine Learning",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-location-dot"
-    },
-    {
-      "name": "Quantum Computing",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-tag"
-    },
-    {
-      "name": "Quantum Information",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-envelope"
-    },
-    {
-      "name": "Quantum Cryptography",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-hashtag"
-    },
-    {
-      "name": "Quantum Communication",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-calendar"
-    },
-    {
-      "name": "Quantum Teleportation",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-clipboard-check"
-    }
-  ],
+  "certificates": [],
   "publications": [
     {
-      "name": "Zur Elektrody/namik bewegter Körper",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1905-06-30",
-      "url": "https://en.wikisource.org/wiki/Translation:On_the_Electrodynamics_of_Moving_Bodies",
-      "summary": "It concerned an interpretation of the Michelson–Morley experiment and the properties of light and time. Special relativity incorporates the principle that the speed of light is the same for all inertial observers regardless of the state of motion of the source."
+      "name": "Random Walk in Random Permutation Set Theory",
+      "publisher": "Chaos: An Interdisciplinary Journal of Nonlinear Science",
+      "releaseDate": "2024",
+      "url": "https://doi.org/10.1063/5.0220154",
+      "summary": "<u>Jiefeng Zhou</u>, Zhen Li and Yong Deng"
     },
     {
-      "name": "Über einen die Erzeugung und Verwandlung des Lichtes betreffenden heuristischen Gesichtspunkt",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1905-03-18",
-      "url": "https://de.wikisource.org/wiki/Über_einen_die_Erzeugung_und_Verwandlung_des_Lichtes_betreffenden_heuristischen_Gesichtspunkt",
-      "summary": "In the second paper, he applied the quantum theory to light to explain the photoelectric effect. In particular, he used the idea of light quanta (photons) to explain experimental results, but stressed the importance of the experimental results. The importance of his work on the photoelectric effect earned him the Nobel Prize in Physics in 1921."
+      "name": "Generalized Information Entropy and Generalized Information Dimension",
+      "publisher": "Chaos, Solitons & Fractals (IF5.3, JCR Q1)",
+      "releaseDate": "2024",
+      "url": "https://doi.org/10.1016/j.chaos.2024.114976",
+      "summary": "Tianxiang Zhan, <u>Jiefeng Zhou</u>, Zhen Li, and Yong Deng"
     },
     {
-      "name": "Die Grundlage der allgemeinen Relativitätstheorie",
-      "publisher": "Annalen der Physik",
-      "releaseDate": "1916-03-20",
-      "url": "https://de.wikisource.org/wiki/Die_Grundlage_der_allgemeinen_Relativitätstheorie",
-      "summary": "The publication of the theory of general relativity made him internationally famous. He was professor of physics at the universities of Zurich (1909–1911) and Prague (1911–1912), before he returned to ETH Zurich (1912–1914)."
+      "name": "An Improved Information Volume of Mass Function Based on Plausibility Transformation Method",
+      "publisher": "Expert Systems with Applications (IF7.5, JCR Q1)",
+      "releaseDate": "2024",
+      "url": "https://doi.org/10.1016/j.eswa.2023.121663",
+      "summary": "<u>Jiefeng Zhou</u>, Zhen Li, and Yong Deng"
+    },
+    {
+      "name": "Limit of the Maximum Random Permutation Set Entropy",
+      "publisher": "Physica A (IF 2.8, JCR Q2)",
+      "releaseDate": "Under review",
+      "url": "https://arxiv.org/abs/2403.06206",
+      "summary": "<u>Jiefeng Zhou</u>, Zhen Li, Kang Hao Cheong, and Yong Deng"
     }
   ],
   "skills": [
     {
-      "name": "Physics",
-      "level": "Master",
-      "icon": "fa-solid fa-hashtag",
-      "keywords": [
-        "Quantum Mechanics",
-        "Quantum Computing",
-        "Quantum Information",
-        "Quantum Cryptography",
-        "Quantum Communication",
-        "Quantum Teleportation"
-      ]
-    }
-  ],
-  "languages": [
-    {
-      "language": "German",
-      "fluency": "Native speaker",
-      "icon": ""
+      "name": "Programming Languages",
+      "level": "Advanced",
+      "keywords": ["Python (3+ yrs)", "C (3+ yrs)", "MATLAB (2+ yrs)"]
     },
     {
-      "language": "English",
-      "fluency": "Fluent",
-      "icon": ""
-    }
-  ],
-  "interests": [
-    {
-      "name": "Physics",
-      "icon": "fa-solid fa-tag",
-      "keywords": [
-        "Quantum Mechanics",
-        "Quantum Computing",
-        "Quantum Information",
-        "Quantum Cryptography",
-        "Quantum Communication",
-        "Quantum Teleportation"
-      ]
-    }
-  ],
-  "references": [
-    {
-      "name": "Professor John Doe",
-      "icon": "fa-solid fa-laptop",
-      "reference": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit. D"
+      "name": "Software & Tools",
+      "level": "Proficient",
+      "keywords": ["Unix (1+ yr)", "Git (2+ yr)", "MS Office (4+ yrs)", "PyTorch (2+ yrs)", "TensorFlow (1+ yr)", "LaTeX (2+ yrs)"]
     },
     {
-      "name": "Professor John Doe",
-      "icon": "fa-solid fa-thumbtack",
-      "reference": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam condimentum, diam quis convallis euismod, arcu mi ullamcorper lorem, a vestibulum nunc magna at sem. Sed in risus ac felis varius blandit. D"
+      "name": "Languages",
+      "level": "Native/Proficient",
+      "keywords": ["Mandarin (native)", "Cantonese (proficient)", "English (proficient, TOEFL Score: 102)"]
     }
   ],
+  "languages": [],
+  "interests": [],
+  "references": [],
   "projects": [
     {
-      "name": "Quantum Computing",
-      "summary": "Quantum computing is the use of quantum-mechanical phenomena such as superposition and entanglement to perform computation. Computers that perform quantum computations are known as quantum computers.",
-      "highlights": ["Quantum Teleportation", "Quantum Cryptography"],
-      "startDate": "2018-01-01",
-      "endDate": "2018-01-01",
-      "url": "https://example.com"
+      "name": "Natural Language Processing: Development of Large-Scale Language Model Datasets (RA at UCR)",
+      "summary": "Developed a benchmark for Large Language Models (LLMs) to test their reasoning capabilities and instruction-following ability under conflict information. Proposed information hierarchy within instructions, verified by ablation study. Designed scoring prompts and collected responses from different LLM models, conducting empirical study on the results.",
+      "highlights": [
+        "Developed a benchmark for Large Language Models (LLMs) to test their reasoning capabilities and instruction-following ability under conflict information.",
+        "Proposed information hierarchy within instructions. Our ablation study verified its effectiveness.",
+        "Designed scoring prompts and collected responses from different LLM models, conducted an empirical study on the results."
+      ],
+      "startDate": "2024-07-01",
+      "endDate": "Present",
+      "url": null,
+      "keywords": ["NLP", "LLM", "Benchmark", "Information Hierarchy"]
+    },
+    {
+      "name": "Random Walk in Random Permutation Set Theory (Lead)",
+      "summary": "Established a link between Random Permutation Set Theory (RPST) and random walks, enhancing understanding in both fields. Developed a random walk model derived from RPST, showing similarities to Gaussian random walks. Demonstrated that this random walk can be transformed into a Wiener process through a specific scaling procedure.",
+      "highlights": [
+        "Established a link between Random Permutation Set Theory (RPST) and random walks, enhancing understanding in both fields.",
+        "Developed a random walk model derived from RPST, showing similarities to Gaussian random walks.",
+        "Demonstrated that this random walk can be transformed into a Wiener process through a specific scaling procedure."
+      ],
+      "startDate": "2024-03-01",
+      "endDate": "2024-05-01",
+      "url": null,
+      "keywords": ["RPST", "Random Walk", "Wiener Process"]
+    },
+    {
+      "name": "Generalized Information Entropy and Generalized Information Dimension (Core member)",
+      "summary": "Proposed a Generalized Information Entropy (GIE) to unify various forms of entropy and established the relationship between entropy, fractal dimension, and number of events. Developed a Generalized Information Dimension (GID) to extend the definition of information dimension from probability to mass fusion. Analyzed the role of GIE in approximation calculation and coding systems, demonstrating the particle nature of information similar to Boltzmann entropy.",
+      "highlights": [
+        "Proposed a Generalized Information Entropy (GIE) to unify various forms of entropy and established the relationship between entropy, fractal dimension, and number of events.",
+        "Developed a Generalized Information Dimension (GID) to extend the definition of information dimension from probability to mass fusion.",
+        "Analyzed the role of GIE in approximation calculation and coding systems, demonstrating the particle nature of information similar to Boltzmann entropy."
+      ],
+      "startDate": "2024-01-01",
+      "endDate": "2024-03-01",
+      "url": null,
+      "keywords": ["Generalized Information Entropy", "Generalized Information Dimension", "Fractal Dimension"]
+    },
+    {
+      "name": "Limit of the Maximum Random Permutation Set Entropy (Lead)",
+      "summary": "Proposed the Random Permutation Set (RPS) as a generalization of evidence theory and defined the concept of the envelope of entropy function. Derived and proved the limit of the envelope of RPS entropy, demonstrating significant reduction in computational complexity. Validated the efficiency and conciseness of the proposed envelope through numerical examples, providing new insights into the maximum entropy function.",
+      "highlights": [
+        "Proposed the Random Permutation Set (RPS) as a generalization of evidence theory and defined the concept of the envelope of entropy function.",
+        "Derived and proved the limit of the envelope of RPS entropy, demonstrating significant reduction in computational complexity.",
+        "Validated the efficiency and conciseness of the proposed envelope through numerical examples, providing new insights into the maximum entropy function."
+      ],
+      "startDate": "2023-10-01",
+      "endDate": "2024-01-01",
+      "url": null,
+      "keywords": ["Random Permutation Set", "Entropy Envelope", "Evidence Theory"]
+    },
+    {
+      "name": "An Improved Information Volume of Mass Function (Lead)",
+      "summary": "Proposed an improved Information Volume of Mass Function (IVMF) based on the Plausibility Transformation Method (PTM) to address issues with inconsistent frames of discernment (FOD). Developed a method that yields more reasonable results compared to existing methods in cases of inconsistent FOD, by treating IVMF as a geometric mean of first-order and higher-order information volumes. Demonstrated the efficacy and rationality of the proposed IVMF through a series of numerical examples and an application in threat assessment.",
+      "highlights": [
+        "Proposed an improved Information Volume of Mass Function (IVMF) based on the Plausibility Transformation Method (PTM) to address issues with inconsistent frames of discernment (FOD).",
+        "Developed a method that yields more reasonable results compared to existing methods in cases of inconsistent FOD, by treating IVMF as a geometric mean of first-order and higher-order information volumes.",
+        "Demonstrated the efficacy and rationality of the proposed IVMF through a series of numerical examples and an application in threat assessment."
+      ],
+      "startDate": "2022-12-01",
+      "endDate": "2023-05-01",
+      "url": null,
+      "keywords": ["Information Volume of Mass Function", "Plausibility Transformation Method", "Frame of Discernment"]
+    },
+    {
+      "name": "Bayesian Deep Q-Networks for Suika Game",
+      "summary": "Modeled an MDP problem from open-source game code, extracted relevant game data, and studied Bayesian Deep Q-learning algorithms by reviewing related papers and code. Implemented and enhanced Bayesian Q-learning algorithms within the game environment, integrating Thompson sampling to account for better probability estimation.",
+      "highlights": [
+        "Modeled an MDP problem from open-source game code, extracted relevant game data, and studied Bayesian Deep Q-learning algorithms by reviewing related papers and code.",
+        "Implemented and enhanced Bayesian Q-learning algorithms within the game environment, integrating Thompson sampling to account for better probability estimation."
+      ],
+      "startDate": "2024-04-01",
+      "endDate": "2024-05-01",
+      "url": null,
+      "keywords": ["Bayesian Deep Q-Networks", "Reinforcement Learning", "Thompson Sampling", "MDP"]
+    },
+    {
+      "name": "Pneumonia Detection Breast Cancer Segmentation With Att-UNet",
+      "summary": "Implemented the UNet and Attention-UNet using PyTorch, based on thorough research into CNN and UNet principles, achieving over 95% accuracy on the validation set, successfully deploying image segmentation algorithms on original image classification task. Enhanced the training dataset through data augmentation to improve training effectiveness, ensuring better performance with limited initial data. Collected and visualized training logs.",
+      "highlights": [
+        "Implemented the UNet and Attention-UNet using PyTorch, based on thorough research into CNN and UNet principles, achieving over 95% accuracy on the validation set, successfully deploying image segmentation algorithms on original image classification task.",
+        "Enhanced the training dataset through data augmentation to improve training effectiveness, ensuring better performance with limited initial data.",
+        "Collected and visualized training logs."
+      ],
+      "startDate": "2023-07-01",
+      "endDate": "2023-07-01",
+      "url": null,
+      "keywords": ["UNet", "Attention-UNet", "Image Segmentation", "PyTorch", "CNN"]
+    },
+    {
+      "name": "Implementation of a Text Generation Model Based on TRANSFORMER structure",
+      "summary": "Implemented a decoder-only transformer-based text generation model (GPT-2) with self-attention mechanisms to capture data patterns and dependencies. Analyzed model performance through detailed experimental results, discussing strengths in generating coherent text and identifying areas for enhancement in text generation tasks.",
+      "highlights": [
+        "Implemented a decoder-only transformer-based text generation model (GPT-2) with self-attention mechanisms to capture data patterns and dependencies.",
+        "Analyzed model performance through detailed experimental results, discussing strengths in generating coherent text and identifying areas for enhancement in text generation tasks."
+      ],
+      "startDate": "2024-04-01",
+      "endDate": "2024-05-01",
+      "url": null,
+      "keywords": ["Transformer", "GPT-2", "Text Generation", "Self-Attention"]
     }
   ]
 }

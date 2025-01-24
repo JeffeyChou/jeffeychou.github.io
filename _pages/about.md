@@ -24,3 +24,5 @@ I am an undergraduate student at the University of Electronic Science and Techno
 My research experience includes working as a Research Assistant at the University of California, Riverside (UCR) and leading projects at the Information Fusion and Intelligent Systems Lab at UESTC. I have a strong publication record with papers in reputable journals such as Chaos, Expert Systems with Applications, and Chaos, Solitons & Fractals. My work spans topics like Random Permutation Set Theory, Generalized Information Entropy, and Information Volume of Mass Function.
 
 I am proficient in programming languages like Python and C, and familiar with machine learning frameworks such as PyTorch and TensorFlow.  I am always eager to explore new challenges and contribute to the advancement of knowledge in my fields of interest.
+
+I am currently seeking a Ph.D. position in the field of information theory, machine learning, X-AI or related areas. If you are interested in my work, please feel free to shoot me an email!

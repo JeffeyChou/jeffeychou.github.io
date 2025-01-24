@@ -31,21 +31,6 @@
       }
     ]
   },
-  "work": [],
-  "volunteer": [
-    {
-      "organization": "Expert Systems with Applications (Journal)",
-      "location": "Elsevier",
-      "position": "Peer Reviewer",
-      "url": "https://www.journals.elsevier.com/expert-systems-with-applications",
-      "startDate": "2023-12-01",
-      "endDate": "2023-12-31",
-      "summary": "Conducted peer review for one publication/grant for Expert Systems with Applications journal.",
-      "highlights": [
-        "Reviewed manuscript for Expert Systems with Applications journal."
-      ]
-    }
-  ],
   "education": [
     {
       "institution": "University of Electronic Science and Technology of China (UESTC, 985 project)",
@@ -61,6 +46,36 @@
         "Physics: University Physics, Physical Experiment, Theoretical Mechanics, Quantum Mechanics",
         "Computer Science: Data Structure and Algorithm, Machine Learning, Deep Learning, Reinforcement Learning"
       ]
+    }
+  ],
+  "publications": [
+    {
+      "name": "Random Walk in Random Permutation Set Theory",
+      "publisher": "Chaos: An Interdisciplinary Journal of Nonlinear Science (IF 2.7 JCR Q1)",
+      "releaseDate": "2024",
+      "url": "https://doi.org/10.1063/5.0220154",
+      "summary": "<u>Jiefeng Zhou</u>, Zhen Li and Yong Deng"
+    },
+    {
+      "name": "Generalized Information Entropy and Generalized Information Dimension",
+      "publisher": "Chaos, Solitons & Fractals (IF5.3, JCR Q1)",
+      "releaseDate": "2024",
+      "url": "https://doi.org/10.1016/j.chaos.2024.114976",
+      "summary": "Tianxiang Zhan, <u>Jiefeng Zhou</u>, Zhen Li, and Yong Deng"
+    },
+    {
+      "name": "An Improved Information Volume of Mass Function Based on Plausibility Transformation Method",
+      "publisher": "Expert Systems with Applications (IF7.5, JCR Q1)",
+      "releaseDate": "2024",
+      "url": "https://doi.org/10.1016/j.eswa.2023.121663",
+      "summary": "<u>Jiefeng Zhou</u>, Zhen Li, and Yong Deng"
+    },
+    {
+      "name": "Limit of the Maximum Random Permutation Set Entropy",
+      "publisher": "Physica A (IF 2.8, JCR Q2)",
+      "releaseDate": "Under review",
+      "url": "https://arxiv.org/abs/2403.06206",
+      "summary": "<u>Jiefeng Zhou</u>, Zhen Li, Kang Hao Cheong, and Yong Deng"
     }
   ],
   "awards": [
@@ -108,36 +123,6 @@
     }
   ],
   "certificates": [],
-  "publications": [
-    {
-      "name": "Random Walk in Random Permutation Set Theory",
-      "publisher": "Chaos: An Interdisciplinary Journal of Nonlinear Science",
-      "releaseDate": "2024",
-      "url": "https://doi.org/10.1063/5.0220154",
-      "summary": "<u>Jiefeng Zhou</u>, Zhen Li and Yong Deng"
-    },
-    {
-      "name": "Generalized Information Entropy and Generalized Information Dimension",
-      "publisher": "Chaos, Solitons & Fractals (IF5.3, JCR Q1)",
-      "releaseDate": "2024",
-      "url": "https://doi.org/10.1016/j.chaos.2024.114976",
-      "summary": "Tianxiang Zhan, <u>Jiefeng Zhou</u>, Zhen Li, and Yong Deng"
-    },
-    {
-      "name": "An Improved Information Volume of Mass Function Based on Plausibility Transformation Method",
-      "publisher": "Expert Systems with Applications (IF7.5, JCR Q1)",
-      "releaseDate": "2024",
-      "url": "https://doi.org/10.1016/j.eswa.2023.121663",
-      "summary": "<u>Jiefeng Zhou</u>, Zhen Li, and Yong Deng"
-    },
-    {
-      "name": "Limit of the Maximum Random Permutation Set Entropy",
-      "publisher": "Physica A (IF 2.8, JCR Q2)",
-      "releaseDate": "Under review",
-      "url": "https://arxiv.org/abs/2403.06206",
-      "summary": "<u>Jiefeng Zhou</u>, Zhen Li, Kang Hao Cheong, and Yong Deng"
-    }
-  ],
   "skills": [
     {
       "name": "Programming Languages",
@@ -148,14 +133,38 @@
       "name": "Software & Tools",
       "level": "Proficient",
       "keywords": ["Unix (1+ yr)", "Git (2+ yr)", "MS Office (4+ yrs)", "PyTorch (2+ yrs)", "TensorFlow (1+ yr)", "LaTeX (2+ yrs)"]
-    },
-    {
-      "name": "Languages",
-      "level": "Native/Proficient",
-      "keywords": ["Mandarin (native)", "Cantonese (proficient)", "English (proficient, TOEFL Score: 102)"]
     }
   ],
-  "languages": [],
+  "languages": [
+    {
+      "language": "Mandarin",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Cantonese",
+      "fluency": "Proficient speaker"
+    },
+    {
+      "language": "English",
+      "fluency": "Proficient speaker (TOEFL: 102)"
+    }
+  ],
+  
+  "work": [],
+  "volunteer": [
+    {
+      "organization": "Expert Systems with Applications (Journal)",
+      "location": "Elsevier",
+      "position": "Peer Reviewer",
+      "url": "https://www.journals.elsevier.com/expert-systems-with-applications",
+      "startDate": "2023-12-01",
+      "endDate": "2023-12-31",
+      "summary": "Conducted peer review for one publication/grant for Expert Systems with Applications journal.",
+      "highlights": [
+        "Reviewed manuscript for Expert Systems with Applications journal."
+      ]
+    }
+  ],
   "interests": [],
   "references": [],
   "projects": [

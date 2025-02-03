@@ -73,7 +73,7 @@
     {
       "name": "Limit of the Maximum Random Permutation Set Entropy",
       "publisher": "Physica A (IF 2.8, JCR Q2)",
-      "releaseDate": "Under review",
+      "releaseDate": "Accepted",
       "url": "https://arxiv.org/abs/2403.06206",
       "summary": "<u>Jiefeng Zhou</u>, Zhen Li, Kang Hao Cheong, and Yong Deng"
     }
@@ -166,7 +166,28 @@
     }
   ],
   "interests": [],
-  "references": [],
+  "references": [
+    {
+      "name": "Yong Deng",
+      "icon": "fa-solid fa-thumbtack",
+      "reference": "dengentropy at uestc dot edu dot cn, Full professor, University of Electronic Science and Technology of China"
+    },
+    {
+      "name": "Kang Hao Cheong",
+      "icon": "fa-solid fa-thumbtack",
+      "reference": "kanghao.cheong at ntu dot edu dot sg, Associate Professor, Nanyang Technological University"
+    },
+    {
+      "name": "Yue Dong",
+      "icon": "fa-solid fa-thumbtack",
+      "reference": "yue.dong at ucr dot edu, Assistant Professor, University of California, Riverside"
+    },
+    {
+      "name": "Sheng Wang",
+      "icon": "fa-solid fa-thumbtack",
+      "reference": "wsh_keylab at uestc dot edu dot cn, Professor, University of Electronic Science and Technology of China"
+      }
+  ],
   "projects": [
     {
       "name": "Natural Language Processing: Development of Large-Scale Language Model Datasets (RA at UCR)",

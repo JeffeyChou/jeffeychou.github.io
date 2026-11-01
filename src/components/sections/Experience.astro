@@ -1,0 +1,50 @@
+---
+import { profile, experience, education, awards, service } from '../../data/profile';
+const year = new Date().getFullYear();
+---
+<section class="section" id="experience" aria-labelledby="experience-title">
+  <h2 id="experience-title" class="sr-only">Experience</h2>
+
+  <div class="subsection" id="education">
+    <h2>Education</h2>
+    <ul class="rows">
+      {education.map((e) => (
+        <li>
+          <span class="meta when">{e.dates}</span>
+          <div class="what"><b>{e.school}</b><span class="muted">{e.degree} · {e.note}</span></div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="subsection" id="positions">
+    <h2>Industrial and Research Experience</h2>
+    <ul class="rows">
+      {experience.map((x) => (
+        <li>
+          <span class="meta when">{x.dates}</span>
+          <div class="what">
+            <b>{x.org}</b>
+            <span class="muted">{x.role} · {x.place}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="subsection" id="awards">
+    <h2>Awards</h2>
+    <ul class="rows">
+      {awards.map((a) => <li><span class="meta when">{a.date}</span><span class="what">{a.text}</span></li>)}
+    </ul>
+  </div>
+
+  <div class="subsection" id="service">
+    <h2>Service</h2>
+    <ul class="rows">
+      {service.map((a) => <li><span class="meta when">{a.date}</span><span class="what">{a.text}</span></li>)}
+    </ul>
+  </div>
+
+  <p class="meta colophon">© {year} {profile.name} · <a href={`mailto:${profile.email}`}>{profile.email}</a> · The background is a point cloud drawn as ASCII in real time.</p>
+</section>

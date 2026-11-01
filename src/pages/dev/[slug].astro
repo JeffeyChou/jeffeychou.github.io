@@ -1,0 +1,61 @@
+---
+// One project's short post: what it is, why, how it works, how to use it, with a live preview when there is one.
+import 'katex/dist/katex.min.css';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { getProjects, npmUrl, type Project } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+interface Props { project: Project }
+const { project } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const host = d.preview ? new URL(d.preview.src).host : '';
+---
+<Base title={d.title} description={d.summary} section="dev" stage="dev">
+  <div class="page page--article">
+    <div class="board board--article article-wrap">
+      <article class="proj-post">
+        <header class="article-head">
+          <a class="back" href="/dev/"><Icon name="back" /> Dev</a>
+          <p class="meta">{[String(d.year), ...d.stack, `${d.license} license`].join(' · ')}</p>
+          <h1>{d.title}</h1>
+          <p class="lead">{d.summary}</p>
+          <p class="proj__links proj__links--post">
+            <a href={d.repo} rel="noopener"><Icon name="github" />GitHub</a>
+            {d.demo && <a href={d.demo} rel="noopener"><Icon name="external" />{d.demoLabel}</a>}
+            {d.npm && <a href={npmUrl(d.npm)} rel="noopener"><Icon name="external" />npm</a>}
+          </p>
+        </header>
+
+        {d.preview?.kind === 'iframe' && (
+          <figure class="proj-preview">
+            <iframe
+              src={d.preview.src}
+              title={`${d.title}: live demo`}
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              style={`height:${d.preview.height ?? 520}px`}
+            ></iframe>
+            <figcaption class="meta">
+              Live demo from {host}. <a href={d.preview.src} rel="noopener">Open it in a new tab</a>.
+            </figcaption>
+          </figure>
+        )}
+        {d.preview?.kind === 'image' && (
+          <figure class="proj-preview proj-preview--image">
+            <img src={d.preview.src} alt={d.preview.alt} width={d.preview.width} height={d.preview.height} loading="lazy" decoding="async" />
+          </figure>
+        )}
+
+        <div class="prose">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </div>
+</Base>

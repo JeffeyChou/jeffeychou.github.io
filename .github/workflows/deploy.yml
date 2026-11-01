@@ -1,0 +1,44 @@
+# Builds the site and publishes it to GitHub Pages on every push to main, and every 3 days so the
+# visitor map (fetched at build time) and the conference deadlines (synced with ccfddl by
+# scripts/update-deadlines.ts before the build) stay current.
+# One-time setup: repository Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# Visitor map (optional): add the repository secret GOATCOUNTER_TOKEN (see README → Visitor map).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 7 */3 * *' # every 3 days, 07:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GOATCOUNTER_TOKEN: ${{ secrets.GOATCOUNTER_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: withastro/action@v6
+        with:
+          node-version: '24' # Astro 7 needs Node >= 22.23
+          package-manager: pnpm@12.9.1 # the version that wrote pnpm-lock.yaml
+          build-cmd: pnpm run build:ci # sync deadlines (never fails the build), then astro build
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

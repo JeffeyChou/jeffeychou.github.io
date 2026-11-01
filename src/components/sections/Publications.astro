@@ -1,0 +1,94 @@
+---
+import bibSrc from '../../data/publications.bib?raw';
+import { parseBib, byYear, initials, LINK_LABEL, type LinkKind } from '../../lib/bib';
+import { profile } from '../../data/profile';
+// Two lines per entry: the title (linked to its DOI page when there is one), then
+// authors · venue. Newest first. Optional pdf/code/project/... fields from the .bib
+// appear at the end of the second line; a preview image adds a thumbnail.
+const pubs = byYear(parseBib(bibSrc)).flatMap((y) => y.items);
+const scholar = profile.links.find((l) => l.kind === 'scholar');
+const allBib = pubs.map((p) => p.bibtex).join('\n\n');
+const venueOf = (p: (typeof pubs)[number]) =>
+  p.group === 'poster'
+    ? `${p.venueShort} ACM SRC Poster`
+    : p.type === 'article'
+      ? `${p.venueShort}, ${p.year}`
+      : p.status === 'accepted'
+        ? `${p.venueShort} (to appear)`
+        : p.venueShort;
+---
+<section class="section" id="publications" aria-labelledby="publications-title" data-pubs data-view="list">
+  <div class="section-head">
+    <h2 id="publications-title">Publications</h2>
+    <div class="pub-tools meta">
+      <div class="seg" role="group" aria-label="Publication view">
+        <button type="button" data-view-btn="list" aria-pressed="true">List</button>
+        <button type="button" data-view-btn="bibtex" aria-pressed="false">BibTeX</button>
+      </div>
+      {scholar && <a href={scholar.href} rel="noopener">Google Scholar</a>}
+    </div>
+  </div>
+
+  <ol class="pubs pub-list">
+    {pubs.map((p) => {
+      const kinds = Object.keys(p.links) as LinkKind[];
+      return (
+        <li class:list={['pub', { 'has-thumb': !!p.preview }]} id={p.key}>
+          {p.preview && <img class="pub__thumb" src={p.preview} alt="" loading="lazy" decoding="async" />}
+          <div class="pub__body">
+            <p class="pub__title">
+              {p.doi ? <a href={`https://doi.org/${p.doi}`} rel="noopener">{p.title}</a> : p.title}
+            </p>
+            <p class="small pub__authors">
+              {p.authors.map((a, i) => (
+                <>
+                  {a.me ? <strong>{initials(a.given)} {a.family}</strong> : `${initials(a.given)} ${a.family}`}
+                  {i < p.authors.length - 2 ? ', ' : i === p.authors.length - 2 ? ', and ' : ''}
+                </>
+              ))}
+              <span class="pub__venue"> · <b>{venueOf(p)}</b></span>
+              {kinds.map((k) => <> · <a href={p.links[k]} rel="noopener">{LINK_LABEL[k]}</a></>)}
+            </p>
+          </div>
+        </li>
+      );
+    })}
+  </ol>
+
+  <div class="bib-all" hidden>
+    <pre><code>{allBib}</code></pre>
+    <p class="meta"><button class="text-btn" type="button" data-copy>Copy</button> · <a href="/publications.bib" download>Download .bib</a></p>
+  </div>
+</section>
+
+<script>
+  function bindPubs() {
+    const root = document.querySelector<HTMLElement>('[data-pubs]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    root.addEventListener('click', async (e) => {
+      const t = e.target as HTMLElement;
+      const view = t.closest<HTMLButtonElement>('[data-view-btn]');
+      if (view) {
+        const v = view.dataset.viewBtn!;
+        root.dataset.view = v;
+        root.querySelectorAll<HTMLButtonElement>('[data-view-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b === view)));
+        root.querySelector<HTMLElement>('.pub-list')!.hidden = v !== 'list';
+        root.querySelector<HTMLElement>('.bib-all')!.hidden = v !== 'bibtex';
+        return;
+      }
+      const copy = t.closest<HTMLButtonElement>('[data-copy]');
+      if (copy) {
+        const code = root.querySelector('.bib-all code')?.textContent ?? '';
+        try {
+          await navigator.clipboard.writeText(code);
+          copy.textContent = 'Copied';
+          setTimeout(() => (copy.textContent = 'Copy'), 1400);
+        } catch {
+          /* clipboard unavailable: the text is selectable */
+        }
+      }
+    });
+  }
+  document.addEventListener('astro:page-load', bindPubs);
+</script>

@@ -1,0 +1,214 @@
+---
+// Conference paper deadlines with live countdowns (/conference/). Data: src/data/deadlines.ts (see README → Conference deadlines).
+import Base from '../layouts/Base.astro';
+import { venues, cycles, checked, synced } from '../data/deadlines';
+import { AREAS, edition, official, milestoneDate } from '../lib/deadlines';
+import { longDate } from '../lib/dates';
+
+const rows = cycles
+  .filter((c) => venues[c.conf])
+  .map((c) => ({ c, v: venues[c.conf] }))
+  .sort((a, b) => Date.parse(a.c.paper) - Date.parse(b.c.paper));
+const areas = AREAS.filter((a) => rows.some((r) => r.v.area === a.id));
+const conferences = [...new Set(rows.map((r) => r.c.conf))];
+---
+<Base
+  title="Conference deadlines"
+  description={`Paper deadlines with live countdowns for ${conferences.length} conferences in HPC, architecture, systems, networks, databases and programming languages.`}
+  section="conference"
+  stage="conference"
+>
+  <div class="page page--blog">
+    <article class="board board--blog deadlines" data-deadlines>
+      <h1>Conference deadlines</h1>
+      <div class="dl-intro">
+        <div class="dl-intro__main">
+          <p class="lead">
+            Paper deadlines for the conferences I follow in HPC, computer architecture, systems, networks, databases
+            and programming languages, with countdowns that run on your clock.
+          </p>
+          <p class="dl-about">
+            Each deadline is written as its call for papers states it, usually AoE (Anywhere on Earth, UTC−12); the
+            time under each countdown is the same moment in your time zone<span data-tz></span>. Author response and
+            revision periods are listed once they are announced. The conference name links to its call for papers,
+            which also describes any step without a fixed date. PVLDB’s monthly deadlines are listed one per month.
+          </p>
+        </div>
+        <aside class="dl-key" aria-label="About the labels">
+          <dl>
+            <div><dt>Estimated</dt><dd>projected from last year’s schedule; the call for papers is not out yet</dd></div>
+            <div><dt>CCF-A, B, C</dt><dd>class on the CCF recommended list (2026 edition)</dd></div>
+            <div><dt>CSRankings</dt><dd>counted in <a href="https://csrankings.org/" rel="noopener">CSRankings</a>’ default ranking</dd></div>
+          </dl>
+          <p>
+            Checked against the official pages on {longDate(new Date(`${checked}T12:00:00Z`))}{synced && (
+              <Fragment>; synced with <a href="https://ccfddl.com/" rel="noopener">ccfddl</a> on {longDate(new Date(`${synced}T12:00:00Z`))}</Fragment>
+            )}.
+          </p>
+        </aside>
+      </div>
+
+      <div class="dl-tools">
+        <div class="dl-areas" role="group" aria-label="Area">
+          <button type="button" data-area="all" aria-pressed="true">All</button>
+          {areas.map((a) => <button type="button" data-area={a.id} aria-pressed="false">{a.label}</button>)}
+        </div>
+        <div class="seg meta" role="group" aria-label="Deadlines">
+          <button type="button" data-view="upcoming" aria-pressed="true">Upcoming <span data-n="upcoming"></span></button>
+          <button type="button" data-view="past" aria-pressed="false">Past <span data-n="past"></span></button>
+        </div>
+      </div>
+
+      <ol class="dl-list" data-dl-list>
+        {rows.map(({ c, v }) => {
+          const tags = [v.ccf && `CCF-${v.ccf}`, v.csrankings && 'CSRankings'].filter(Boolean) as string[];
+          const place = [c.when, c.where].filter(Boolean).join(' · ');
+          const ms = c.milestones ?? [];
+          return (
+            <li
+              class="dl"
+              data-area={v.area}
+              data-paper={Date.parse(c.paper)}
+              data-abstract={c.abstract ? Date.parse(c.abstract) : undefined}
+            >
+              <div class="dl__conf">
+                <p class="dl__title">
+                  <a href={c.url} rel="noopener">{edition(c)}</a>
+                  {c.cycle && <span class="dl__cycle">{c.cycle}</span>}
+                </p>
+                {tags.length > 0 && <p class="dl__tags">{tags.map((t) => <span>{t}</span>)}</p>}
+              </div>
+              <div class="dl__count">
+                <span class="dl__clock" data-clock></span>
+                <span class="dl__local" data-local></span>
+              </div>
+              <div class="dl__body">
+                <p class="dl__name">{v.name}</p>
+                <p class="dl__dates">
+                  {c.abstract && <span data-at={Date.parse(c.abstract)}>Abstract <time datetime={c.abstract}>{official(c.abstract)}</time></span>}
+                  <span data-at={Date.parse(c.paper)}>Paper <time datetime={c.paper}>{official(c.paper)}</time></span>
+                  {c.estimated && <span class="dl__est" title={c.note ?? 'Projected from last year’s schedule'}>Estimated</span>}
+                </p>
+                {(place || ms.length > 0) && (
+                  <p class="dl__more meta">
+                    {place && <span>{place}</span>}
+                    {ms.map((m) => <span>{m.label} {milestoneDate(m)}</span>)}
+                  </p>
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+      <p class="empty" data-dl-empty hidden>Nothing here for this area.</p>
+    </article>
+    <div class="page-end" aria-hidden="true"></div>
+  </div>
+</Base>
+
+<script>
+  type Row = { el: HTMLElement; area: string; paper: number; abstract: number | null };
+
+  const WEEK = 7 * 864e5;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  function clock(ms: number): string {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const d = Math.floor(s / 86400);
+    const hms = `${pad(Math.floor((s % 86400) / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+    return `${d}d ${hms}`;
+  }
+  const localY = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const localD = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  const thisYear = new Date().getFullYear();
+  const local = { format: (t: number) => (new Date(t).getFullYear() === thisYear ? localD : localY).format(t) };
+  const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+  function ago(ms: number): string {
+    const days = Math.round(ms / 864e5);
+    if (days < 1) return rtf.format(-Math.max(1, Math.round(ms / 3600e3)), 'hour');
+    if (days < 14) return rtf.format(-days, 'day');
+    if (days < 60) return rtf.format(-Math.round(days / 7), 'week');
+    return rtf.format(-Math.round(days / 30.4), 'month');
+  }
+
+  let timer: number | undefined;
+
+  function init() {
+    const root = document.querySelector<HTMLElement>('[data-deadlines]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    clearInterval(timer);
+
+    const list = root.querySelector<HTMLOListElement>('[data-dl-list]')!;
+    const empty = root.querySelector<HTMLElement>('[data-dl-empty]')!;
+    const rows: Row[] = [...list.querySelectorAll<HTMLElement>('li.dl')].map((el) => ({
+      el,
+      area: el.dataset.area!,
+      paper: Number(el.dataset.paper),
+      abstract: el.dataset.abstract ? Number(el.dataset.abstract) : null,
+    }));
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const tzEl = root.querySelector('[data-tz]');
+    if (tzEl && tz) tzEl.textContent = ` (${tz.replaceAll('_', ' ')})`;
+
+    let view: 'upcoming' | 'past' = 'upcoming';
+    let area = 'all';
+    let shown: Row[] = [];
+
+    const next = (r: Row, now: number) => (r.abstract && r.abstract > now ? { at: r.abstract, what: 'Abstract' } : { at: r.paper, what: 'Paper' });
+
+    function paint(now: number) {
+      for (const r of shown) {
+        r.el.querySelectorAll<HTMLElement>('[data-at]').forEach((s) => s.classList.toggle('is-past', view === 'upcoming' && Number(s.dataset.at) <= now));
+        const clockEl = r.el.querySelector<HTMLElement>('[data-clock]')!;
+        const localEl = r.el.querySelector<HTMLElement>('[data-local]')!;
+        if (view === 'upcoming') {
+          const n = next(r, now);
+          clockEl.textContent = clock(n.at - now);
+          r.el.toggleAttribute('data-soon', n.at - now < WEEK);
+          localEl.textContent = `${n.what} · ${local.format(n.at)}`;
+        } else {
+          clockEl.textContent = `Closed ${ago(now - r.paper)}`;
+          r.el.removeAttribute('data-soon');
+          localEl.textContent = local.format(r.paper);
+        }
+      }
+    }
+
+    function apply() {
+      const now = Date.now();
+      const inArea = rows.filter((r) => area === 'all' || r.area === area);
+      const up = inArea.filter((r) => r.paper > now);
+      const past = inArea.filter((r) => r.paper <= now);
+      root!.querySelector('[data-n="upcoming"]')!.textContent = String(up.length);
+      root!.querySelector('[data-n="past"]')!.textContent = String(past.length);
+      shown = view === 'upcoming' ? up.sort((a, b) => next(a, now).at - next(b, now).at) : past.sort((a, b) => b.paper - a.paper);
+      const set = new Set(shown);
+      for (const r of rows) r.el.hidden = !set.has(r);
+      list.replaceChildren(...shown.map((r) => r.el), ...rows.filter((r) => !set.has(r)).map((r) => r.el));
+      empty.hidden = shown.length > 0;
+      root!.dataset.showing = view;
+      root!.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+      root!.querySelectorAll<HTMLButtonElement>('[data-area]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.area === area)));
+      paint(now);
+    }
+
+    root.addEventListener('click', (e) => {
+      const b = (e.target as Element).closest<HTMLButtonElement>('button[data-view], button[data-area]');
+      if (!b) return;
+      if (b.dataset.view) view = b.dataset.view as typeof view;
+      if (b.dataset.area) area = b.dataset.area;
+      apply();
+    });
+
+    apply();
+    timer = window.setInterval(() => {
+      if (!root.isConnected) return clearInterval(timer);
+      const now = Date.now();
+      // a deadline passed while the page was open: move it to Past
+      if (view === 'upcoming' && shown.some((r) => r.paper <= now)) apply();
+      else if (view === 'upcoming') paint(now);
+    }, 1000);
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>

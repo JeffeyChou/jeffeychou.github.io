@@ -1,0 +1,35 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { profile } from '../../data/profile';
+// Portrait slot: public/photo.{jpg,png,webp}; an empty frame until a file is added.
+const photo = ['photo.jpg', 'photo.png', 'photo.webp'].find((f) => existsSync(join(process.cwd(), 'public', f)));
+---
+<section class="hero" id="about" aria-labelledby="about-title">
+  <div class="hero__text">
+    <h1 id="about-title">{profile.name}<span lang="zh">{profile.nameZh}</span></h1>
+    <p class="hero__role">
+      {profile.role}<br />
+      {profile.affiliation}
+    </p>
+    <p class="links">
+      {profile.links.map((l) => (
+        <a href={l.href} rel={l.href.startsWith('http') ? 'me noopener' : undefined}>{l.kind === 'email' ? profile.email : l.label}</a>
+      ))}
+    </p>
+    <div class="bio">
+      {profile.bio.map((p) => <p set:html={p} />)}
+    </div>
+  </div>
+
+  <aside class="hero__side" aria-label="Photo and address">
+    {photo ? (
+      <img class="hero__photo" src={`/${photo}`} alt={`Portrait of ${profile.name}`} width="480" height="600" />
+    ) : (
+      <div class="hero__photo hero__photo--empty meta" aria-hidden="true">Photo</div>
+    )}
+    <address class="small hero__address">
+      {profile.address.map((line) => <span>{line}</span>)}
+    </address>
+  </aside>
+</section>

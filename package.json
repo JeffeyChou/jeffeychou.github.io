@@ -1,0 +1,40 @@
+{
+  "name": "jeffeychou-homepage",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "bake": "node --experimental-strip-types scripts/bake-ascii.ts",
+    "bake:world": "node --experimental-strip-types scripts/bake-world.ts",
+    "deadlines": "node --experimental-strip-types scripts/update-deadlines.ts",
+    "build:ci": "node --experimental-strip-types scripts/update-deadlines.ts --ci; astro build"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.5",
+    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.4.4",
+    "katex": "^0.19.1",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/d3-geo": "^3.1.1",
+    "@types/geojson": "^7946.0.16",
+    "@types/three": "^0.187.0",
+    "@types/topojson-client": "^3.1.5",
+    "d3-geo": "^3.1.1",
+    "i18n-iso-countries": "^7.14.0",
+    "topojson-client": "^3.1.0",
+    "typescript": "^6.0.3",
+    "world-atlas": "^2.0.2",
+    "yaml": "^2.9.1"
+  }
+}

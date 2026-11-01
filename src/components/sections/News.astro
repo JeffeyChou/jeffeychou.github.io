@@ -1,0 +1,40 @@
+---
+import { news } from '../../data/profile';
+import { monthYear } from '../../lib/dates';
+// Newest first. The list is collapsed to a scrollable window; "Show all" expands it.
+---
+<section class="section" id="news" aria-labelledby="news-title">
+  <h2 id="news-title">News</h2>
+  <div class="news" data-news data-collapsed="true" data-overflow="false">
+    <div class="news__scroll" tabindex="0" aria-label="News items">
+      <ul class="rows">
+        {news.map((n) => (
+          <li><time class="meta when" datetime={n.date}>{monthYear(n.date)}</time><span class="what" set:html={n.text} /></li>
+        ))}
+      </ul>
+    </div>
+    <button class="text-btn meta" type="button" data-news-toggle hidden aria-expanded="false">Show all</button>
+  </div>
+</section>
+
+<script>
+  function bindNews() {
+    document.querySelectorAll<HTMLElement>('[data-news]').forEach((box) => {
+      const scroll = box.querySelector<HTMLElement>('.news__scroll')!;
+      const btn = box.querySelector<HTMLButtonElement>('[data-news-toggle]')!;
+      const overflow = scroll.scrollHeight > scroll.clientHeight + 4;
+      box.dataset.overflow = String(overflow);
+      btn.hidden = !overflow;
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', () => {
+        const collapsed = box.dataset.collapsed === 'true';
+        box.dataset.collapsed = String(!collapsed);
+        btn.setAttribute('aria-expanded', String(collapsed));
+        btn.textContent = collapsed ? 'Show less' : 'Show all';
+        if (!collapsed) scroll.scrollTop = 0;
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', bindNews);
+</script>

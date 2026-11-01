@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import About from '../components/sections/About.astro';
+import News from '../components/sections/News.astro';
+import Publications from '../components/sections/Publications.astro';
+import Experience from '../components/sections/Experience.astro';
+---
+<Base section="academic" stage="academic">
+  <div class="page">
+    <article class="board board--academic" data-board>
+      <About />
+      <News />
+      <Publications />
+      <Experience />
+    </article>
+    <div class="page-end" aria-hidden="true"></div>
+  </div>
+</Base>

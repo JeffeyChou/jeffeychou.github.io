@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    rect { fill: #f6f3ec; } text { fill: #242a2c; } .a { fill: #287d78; }
+    @media (prefers-color-scheme: dark) { rect { fill: #10171c; } text { fill: #e5e9e7; } .a { fill: #86cfc1; } }
+  </style>
+  <rect width="64" height="64" rx="14"/>
+  <text x="9" y="43" font-family="ui-monospace, Menlo, monospace" font-size="30" font-weight="700">J<tspan class="a">Z</tspan></text>
+</svg>

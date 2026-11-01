@@ -1,0 +1,27 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostList from '../../../components/PostList.astro';
+import { getPosts, allTags } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return allTags(posts).map(({ tag }) => ({
+    params: { tag },
+    props: { tag, posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+const { tag, posts } = Astro.props;
+---
+<Base title={`Notes on ${tag}`} description={`Notes tagged ${tag}.`} section="blog" stage="blog">
+  <div class="page page--blog">
+    <article class="board board--blog">
+      <div class="blog-head">
+        <h1>{tag}</h1>
+        <a class="meta" href="/blog/">All notes</a>
+      </div>
+      <p class="meta blog-lede">{posts.length} {posts.length === 1 ? 'note' : 'notes'}</p>
+      <PostList posts={posts} />
+    </article>
+    <div class="page-end" aria-hidden="true"></div>
+  </div>
+</Base>

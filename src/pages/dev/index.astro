@@ -1,0 +1,36 @@
+---
+// Dev: the projects I build, as cards. Each card opens a short post (src/pages/dev/[slug].astro).
+// Content: src/content/projects/*.md (see README → Dev projects).
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { getProjects, npmUrl } from '../../lib/projects';
+
+const projects = await getProjects();
+---
+<Base title="Dev" description="Open-source projects by Jiefeng Zhou: what each one does, why it exists, how it works and how to use it." section="dev" stage="dev">
+  <div class="page page--blog">
+    <article class="board board--blog">
+      <h1 class="dev-title">Dev</h1>
+      <p class="lead blog-lede">Open-source projects I build and maintain. Each card opens a short note on what the project does, why it exists, how it works and how to use it.</p>
+
+      <ul class="proj-grid">
+        {projects.map((p) => {
+          const d = p.data;
+          return (
+            <li class="proj">
+              <h2 class="proj__name"><a class="proj__open" href={`/dev/${p.id}/`}>{d.title}</a></h2>
+              <p class="proj__summary">{d.summary}</p>
+              <p class="proj__stack">{d.stack.join(' · ')}</p>
+              <p class="proj__links">
+                <a href={d.repo} rel="noopener"><Icon name="github" />GitHub</a>
+                {d.demo && <a href={d.demo} rel="noopener"><Icon name="external" />{d.demoLabel}</a>}
+                {d.npm && <a href={npmUrl(d.npm)} rel="noopener"><Icon name="external" />npm</a>}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </article>
+    <div class="page-end" aria-hidden="true"></div>
+  </div>
+</Base>

@@ -1,0 +1,122 @@
+/* Materials. Two translucent surfaces only, never stacked:
+   - thick: content boards over the ASCII background
+   - thin:  the About | Blog | Conference | Dev | Exposure capsule in the top bar (its thumb is solid)
+   Everything inside a board is solid. */
+
+.board {
+  position: relative;
+  background: var(--board);
+  -webkit-backdrop-filter: blur(26px) saturate(140%);
+  backdrop-filter: blur(26px) saturate(140%);
+  border: 1px solid var(--board-edge);
+  border-radius: var(--radius-board);
+  box-shadow: var(--board-shadow);
+}
+
+/* ---------------------------------------------------------------- capsule toggle */
+
+.capsule {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(5, auto); /* each segment as wide as its label */
+  align-items: center;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--chrome);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--chrome-edge);
+  box-shadow: var(--chrome-shadow);
+}
+.capsule a {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 3.5rem;
+  height: 36px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color var(--dur-ui) var(--ease), transform var(--dur-press) ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.capsule a:hover {
+  color: var(--ink);
+}
+.capsule a:active {
+  transform: scale(0.97);
+}
+.capsule a[aria-current="page"] {
+  color: var(--ink);
+}
+/* the thumb is placed under the active segment by the top bar script (--thumb-x, --thumb-w);
+   until then the active segment carries the same fill itself */
+.capsule__thumb {
+  position: absolute;
+  z-index: 0;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  width: var(--thumb-w, 0);
+  border-radius: 999px;
+  background: var(--thumb);
+  box-shadow: var(--thumb-shadow);
+  transform: translateX(var(--thumb-x, 0));
+  visibility: hidden;
+}
+.capsule.is-measured .capsule__thumb {
+  visibility: visible;
+}
+.capsule.is-ready .capsule__thumb {
+  transition: transform var(--dur-thumb) var(--ease), width var(--dur-thumb) var(--ease), background-color var(--dur-theme) ease;
+}
+.capsule:not(.is-measured) a[aria-current="page"] {
+  background: var(--thumb);
+  box-shadow: var(--thumb-shadow);
+}
+@media (max-width: 639px) {
+  .capsule a {
+    min-width: 0;
+    height: 34px;
+    padding: 0 0.5rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* ---------------------------------------------------------------- user settings */
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .board {
+    background: var(--board-solid);
+  }
+  .capsule {
+    background: var(--board-solid);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .board,
+  .capsule {
+    background: var(--bg-2);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .board,
+  .capsule {
+    background: var(--board-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: color-mix(in srgb, var(--ink) 40%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .capsule__thumb {
+    transition: none;
+  }
+}

@@ -1,0 +1,16 @@
+---
+// Development-only inspection page: one creature at a time, auto-orbit.
+// ?c=0..3  ?raw (no glyphs)  ?orbit=0 (static)  ?morph=0.5 (to the next creature)
+// Not linked anywhere; excluded from the sitemap and removed before deployment.
+import Base from '../../layouts/Base.astro';
+const names = ['goldfish', 'dragonfly', 'jellyfish', 'butterfly'];
+---
+<Base title="creatures (dev)" section="academic" stage="academic">
+  <div class="page">
+    <nav class="glass glass--label" style="position:fixed;left:20px;bottom:20px;z-index:40;font-family:var(--font-mono);font-size:.8rem;display:flex;gap:12px;flex-wrap:wrap">
+      {names.map((n, i) => <a href={`?c=${i}`}>{n}</a>)}
+      {names.map((n, i) => <a href={`?c=${i}&raw`}>{n}·raw</a>)}
+      {names.map((n, i) => <a href={`?c=${i}&morph=0.5`}>{n}→</a>)}
+    </nav>
+  </div>
+</Base>

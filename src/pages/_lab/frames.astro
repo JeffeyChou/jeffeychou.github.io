@@ -1,0 +1,16 @@
+---
+// Dev-only: embed the site at fixed viewport sizes. ?w=1440&h=900&src=/
+---
+<html lang="en"><head><meta charset="utf-8"><title>frames</title>
+<style>html,body{margin:0;background:#777}iframe{border:0;display:block;transform-origin:0 0}</style></head>
+<body>
+<iframe id="f"></iframe>
+<script is:inline>
+  const q = new URLSearchParams(location.search);
+  const f = document.getElementById('f');
+  const w = +(q.get('w') || 1440), h = +(q.get('h') || 900);
+  f.width = w; f.height = h; f.src = q.get('src') || '/';
+  const s = Math.min(innerWidth / w, innerHeight / h);
+  f.style.transform = `scale(${s})`;
+</script>
+</body></html>

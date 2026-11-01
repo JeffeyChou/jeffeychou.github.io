@@ -1,0 +1,75 @@
+---
+import 'katex/dist/katex.min.css';
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+import type { MarkdownHeading } from 'astro';
+import { longDate } from '../lib/dates';
+
+interface Props {
+  title: string;
+  summary: string;
+  date: Date;
+  updated?: Date;
+  tags: string[];
+  headings: MarkdownHeading[];
+  toc: boolean;
+}
+const { title, summary, date, updated, tags, headings, toc } = Astro.props;
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = toc && items.length > 2;
+---
+<Base title={title} description={summary} section="blog" stage="article">
+  <div class="page page--article">
+    <div class:list={['board', 'board--article', 'article-wrap', { 'has-toc': showToc }]}>
+      <article>
+        <header class="article-head">
+          <a class="back" href="/blog/"><Icon name="back" /> Notes</a>
+          <p class="meta">
+            <time datetime={date.toISOString()}>{longDate(date)}</time>
+            {updated && <> · updated <time datetime={updated.toISOString()}>{longDate(updated)}</time></>}
+            {tags.length > 0 && <> · {tags.map((t, i) => <>{i > 0 && ', '}<a href={`/blog/tags/${t}/`}>{t}</a></>)}</>}
+          </p>
+          <h1>{title}</h1>
+          <p class="lead">{summary}</p>
+        </header>
+        {showToc && (
+          <details class="toc-inline">
+            <summary>On this page</summary>
+            <ol>{items.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+          </details>
+        )}
+        <div class="prose">
+          <slot />
+        </div>
+      </article>
+      {showToc && (
+        <nav class="toc-rail" aria-label="On this page" data-toc>
+          <p class="meta">On this page</p>
+          <ol>{items.map((h) => <li class={`d${h.depth}`}><a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a></li>)}</ol>
+        </nav>
+      )}
+    </div>
+  </div>
+</Base>
+
+<script>
+  // highlight the section being read in the TOC rail
+  let io: IntersectionObserver | null = null;
+  function bind() {
+    io?.disconnect();
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+    if (!links.length) return;
+    const heads = links.map((a) => document.getElementById(a.dataset.tocLink!)).filter(Boolean) as HTMLElement[];
+    io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          links.forEach((a) => a.setAttribute('aria-current', String(a.dataset.tocLink === e.target.id)));
+        }
+      },
+      { rootMargin: '0px 0px -70% 0px' },
+    );
+    heads.forEach((h) => io!.observe(h));
+  }
+  document.addEventListener('astro:page-load', bind);
+</script>

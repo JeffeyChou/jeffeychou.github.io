@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostList from '../../components/PostList.astro';
+import VisitorMap from '../../components/VisitorMap.astro';
+import { getPosts, allTags } from '../../lib/posts';
+const posts = await getPosts();
+const tags = allTags(posts);
+---
+<Base title="Notes" description="Study notes on HPC, collective communication, compression and GPUs." section="blog" stage="blog">
+  <div class="page page--blog">
+    <article class="board board--blog">
+      <div class="blog-head">
+        <h1>Notes</h1>
+        <a class="meta" href="/rss.xml">RSS</a>
+      </div>
+      <p class="lead blog-lede">Study notes and working drafts on HPC, collective communication, lossy compression and GPU kernels.</p>
+      {posts.length >= 5 && tags.length > 0 && (
+        <p class="meta tagline-list">{tags.map((t) => <a href={`/blog/tags/${t.tag}/`}>{t.tag}</a>)}</p>
+      )}
+      {posts.length ? <PostList posts={posts} /> : <p class="empty">No notes yet.</p>}
+      <VisitorMap />
+    </article>
+    <div class="page-end" aria-hidden="true"></div>
+  </div>
+</Base>

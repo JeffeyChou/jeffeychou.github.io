@@ -1,0 +1,17 @@
+---
+import type { Post } from '../lib/posts';
+import { longDate } from '../lib/dates';
+interface Props { posts: Post[] }
+const { posts } = Astro.props;
+---
+<ol class="post-list">
+  {posts.map((p) => (
+    <li>
+      <time class="meta" datetime={p.data.date.toISOString()}>{longDate(p.data.date)}</time>
+      <div>
+        <h2><a href={`/blog/${p.id}/`}>{p.data.title}</a></h2>
+        <p class="small">{p.data.summary}</p>
+      </div>
+    </li>
+  ))}
+</ol>

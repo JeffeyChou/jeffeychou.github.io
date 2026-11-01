@@ -1,0 +1,164 @@
+---
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+import { loadVisitorStats } from '../lib/visitors';
+interface Props { section: 'academic' | 'blog' | 'conference' | 'dev' | 'exposure' }
+const { section } = Astro.props;
+const sections = [
+  { id: 'news', label: 'News' },
+  { id: 'publications', label: 'Publications' },
+  { id: 'experience', label: 'Experience' },
+];
+const blogLinks = [
+  { href: '/blog/', label: 'Notes' },
+  // the visitor map exists only when statistics were fetched (or in development)
+  ...((await loadVisitorStats()) || import.meta.env.DEV ? [{ href: '/blog/#visitors', label: 'Visitors', spy: 'visitors' }] : []),
+];
+---
+<header class="topbar" transition:persist="topbar">
+  <div class="topbar__inner">
+    <div class="topbar__left">
+      <a class="topbar__name" href="/">{profile.name}</a>
+      <nav class="sections" aria-label="Sections" data-sections hidden={section !== 'academic'}>
+        {sections.map((s) => <a href={`/#${s.id}`} data-spy={s.id}>{s.label}</a>)}
+      </nav>
+      <nav class="sections" aria-label="Blog" data-blognav hidden={section !== 'blog'}>
+        {blogLinks.map((l) => <a href={l.href} data-spy={l.spy} data-path={l.spy ? undefined : l.href}>{l.label}</a>)}
+      </nav>
+    </div>
+    <nav class="capsule" data-active={section} aria-label="Site section">
+      <a href="/" data-seg="academic" aria-current={section === 'academic' ? 'page' : undefined}>About</a>
+      <a href="/blog/" data-seg="blog" aria-current={section === 'blog' ? 'page' : undefined}>Blog</a>
+      <a href="/conference/" data-seg="conference" aria-current={section === 'conference' ? 'page' : undefined}>Conference</a>
+      <a href="/dev/" data-seg="dev" aria-current={section === 'dev' ? 'page' : undefined}>Dev</a>
+      <a href="/exposure/" data-seg="exposure" aria-current={section === 'exposure' ? 'page' : undefined}>Exposure</a>
+      <span class="capsule__thumb" aria-hidden="true"></span>
+    </nav>
+    <div class="topbar__tools">
+      <button class="icon-btn" type="button" data-motion-toggle aria-pressed="false" aria-label="Pause background animation" title="Pause or play the background">
+        <Icon name="pause" class="i-pause" /><Icon name="play" class="i-play" />
+      </button>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark mode" title="Light or dark">
+        <Icon name="moon" class="i-moon" /><Icon name="sun" class="i-sun" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  // The top bar persists across view transitions; keep it in sync with the URL and settings.
+  const root = document.documentElement;
+
+  /** slide the thumb under the active segment (segments have different widths) */
+  function placeThumb() {
+    const capsule = document.querySelector<HTMLElement>('.capsule');
+    const a = capsule?.querySelector<HTMLElement>(`a[data-seg="${capsule.dataset.active}"]`);
+    if (!capsule || !a || !a.offsetWidth) return;
+    capsule.style.setProperty('--thumb-x', `${a.offsetLeft}px`);
+    capsule.style.setProperty('--thumb-w', `${a.offsetWidth}px`);
+    if (!capsule.classList.contains('is-measured')) {
+      capsule.classList.add('is-measured');
+      requestAnimationFrame(() => requestAnimationFrame(() => capsule.classList.add('is-ready')));
+    }
+  }
+
+  function sync() {
+    const p = location.pathname;
+    const seg = p.startsWith('/blog')
+      ? 'blog'
+      : p.startsWith('/conference')
+        ? 'conference'
+        : p.startsWith('/dev')
+          ? 'dev'
+          : p.startsWith('/exposure')
+            ? 'exposure'
+            : 'academic';
+    const capsule = document.querySelector<HTMLElement>('.capsule');
+    if (capsule) {
+      capsule.dataset.active = seg;
+      capsule.querySelectorAll<HTMLAnchorElement>('a[data-seg]').forEach((a) => {
+        if (a.dataset.seg === seg) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+      placeThumb();
+    }
+    const nav = document.querySelector<HTMLElement>('[data-sections]');
+    if (nav) nav.hidden = !(document.body.dataset.stage === 'academic');
+    const blognav = document.querySelector<HTMLElement>('[data-blognav]');
+    if (blognav) {
+      blognav.hidden = seg !== 'blog';
+      blognav.querySelectorAll<HTMLAnchorElement>('a[data-path]').forEach((a) => {
+        if (a.dataset.path === location.pathname) a.setAttribute('aria-current', 'page');
+        else a.removeAttribute('aria-current');
+      });
+    }
+    const motionOff = root.dataset.motion === 'off';
+    const mb = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+    mb?.setAttribute('aria-pressed', String(motionOff));
+    mb?.setAttribute('aria-label', motionOff ? 'Play background animation' : 'Pause background animation');
+    const tb = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+    tb?.setAttribute('aria-label', root.dataset.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+
+  // respond on press, not on release
+  document.addEventListener('pointerdown', (e) => {
+    const seg = (e.target as Element).closest<HTMLAnchorElement>('.capsule a[data-seg]');
+    const capsule = seg?.closest<HTMLElement>('.capsule');
+    if (seg && capsule && seg.dataset.seg) {
+      capsule.dataset.active = seg.dataset.seg;
+      placeThumb();
+    }
+  });
+  // label widths change with the fluid type scale and once fonts settle
+  window.addEventListener('resize', placeThumb);
+  document.fonts?.ready.then(placeThumb);
+
+  document.addEventListener('click', (e) => {
+    const t = e.target as Element;
+    if (t.closest('[data-theme-toggle]')) {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch {}
+      window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+      sync();
+    } else if (t.closest('[data-motion-toggle]')) {
+      const off = root.dataset.motion !== 'off';
+      if (off) root.dataset.motion = 'off'; else delete root.dataset.motion;
+      try { localStorage.setItem('motion', off ? 'off' : 'on'); } catch {}
+      window.dispatchEvent(new CustomEvent('motionchange', { detail: off ? 'off' : 'on' }));
+      sync();
+    }
+  });
+
+  // scroll-spy for the section links (academic page only)
+  let spy: IntersectionObserver | null = null;
+  function bindSpy() {
+    spy?.disconnect();
+    const links = new Map<string, HTMLAnchorElement>();
+    document.querySelectorAll<HTMLAnchorElement>('[data-spy]').forEach((a) => links.set(a.dataset.spy!, a));
+    const targets = [...links.keys()].map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if (!targets.length) return;
+    const visible = new Set<string>();
+    spy = new IntersectionObserver(
+      (entries) => {
+        for (const en of entries) {
+          if (en.isIntersecting) visible.add(en.target.id);
+          else visible.delete(en.target.id);
+        }
+        const current = targets.find((t) => visible.has(t.id))?.id;
+        links.forEach((a, id) => {
+          if (id === current) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        });
+      },
+      { rootMargin: '-35% 0px -55% 0px' },
+    );
+    targets.forEach((t) => spy!.observe(t));
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    sync();
+    bindSpy();
+  });
+  sync();
+</script>

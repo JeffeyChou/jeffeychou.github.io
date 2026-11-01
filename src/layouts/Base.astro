@@ -1,0 +1,92 @@
+---
+import '../styles/tokens.css';
+import '../styles/glass.css';
+import '../styles/base.css';
+import '../styles/prose.css';
+import { ClientRouter } from 'astro:transitions';
+import TopBar from '../components/TopBar.astro';
+import { profile } from '../data/profile';
+import { site } from '../data/site';
+import specimens from '../data/specimens.json';
+
+export type Stage = 'academic' | 'blog' | 'conference' | 'dev' | 'exposure' | 'article';
+interface Props {
+  title?: string;
+  description?: string;
+  section: 'academic' | 'blog' | 'conference' | 'dev' | 'exposure';
+  stage: Stage;
+}
+const { title, description = `${profile.name}: ${profile.role}, ${profile.affiliation}. High-performance computing and systems for AI: collective communication and lossy compression.`, section, stage } = Astro.props;
+const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.affiliation}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+// GoatCounter (visitor map): production only, and only once a site code is set in src/data/site.ts
+const goat = import.meta.env.PROD && site.goatcounter.trim() ? `https://${site.goatcounter.trim()}.goatcounter.com/count` : '';
+const fallback = (specimens as Record<string, string>)[stage === 'academic' ? 'jellyfish' : stage === 'conference' ? 'dragonfly' : stage === 'dev' ? 'butterfly' : 'goldfish'] ?? '';
+---
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${profile.name} · Notes`} href="/rss.xml" />
+    <meta name="theme-color" content="#f5f5f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e1418" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content={stage === 'article' ? 'article' : 'website'} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        function apply() {
+          var t = null, m = null;
+          try { t = localStorage.getItem('theme'); m = localStorage.getItem('motion'); } catch (e) {}
+          if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          d.dataset.theme = t;
+          if (m === 'off' || (m !== 'on' && matchMedia('(prefers-reduced-motion: reduce)').matches)) d.dataset.motion = 'off';
+          else delete d.dataset.motion;
+        }
+        apply();
+        document.addEventListener('astro:after-swap', apply);
+      })();
+    </script>
+    <ClientRouter fallback="swap" />
+    {goat && (
+      <script is:inline define:vars={{ goat }}>
+        // count the first page when count.js arrives, then every client-side navigation
+        if (!window.goatcounter) {
+          window.goatcounter = { endpoint: goat, no_onload: true };
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://gc.zgo.at/count.js';
+          s.onload = function () {
+            var hit = function () { window.goatcounter.count && window.goatcounter.count({ path: location.pathname }); };
+            hit();
+            document.addEventListener('astro:after-swap', hit);
+          };
+          document.head.appendChild(s);
+        }
+      </script>
+    )}
+  </head>
+  <body data-stage={stage}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="stage" id="stage" transition:persist="stage" aria-hidden="true">
+      <div class="stage__fallback"><pre data-fallback>{fallback}</pre></div>
+      <canvas id="bg"></canvas>
+    </div>
+    <TopBar section={section} />
+    <main id="main">
+      <slot />
+    </main>
+    <script>
+      import { boot } from '../engine/index.ts';
+      boot();
+    </script>
+  </body>
+</html>

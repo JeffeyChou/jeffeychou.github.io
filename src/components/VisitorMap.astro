@@ -1,0 +1,375 @@
+---
+// Visitors by country, drawn as a glyph map (one glyph per cell of src/data/world-grid.json).
+// The numbers are per country; on the map, countries with a region breakdown are shaded province by province.
+// Data: GoatCounter, fetched at build time (src/lib/visitors.ts). Without data the section is left out of
+// the built site; in `pnpm dev` it shows the empty map with a setup note (add ?demo to the URL for fake numbers).
+import grid from '../data/world-grid.json';
+import { site } from '../data/site';
+import { loadVisitorStats, type VisitorRange } from '../lib/visitors';
+import { regionKey } from '../lib/regions';
+import { longDate } from '../lib/dates';
+
+const stats = await loadVisitorStats();
+const dev = import.meta.env.DEV;
+const show = !!stats || dev;
+
+type Region = { code: string; cc: string; names: string[]; groups: string[] };
+const regions = grid.regions as Region[];
+const regionsOf = new Map<string, number[]>();
+regions.forEach((r, i) => regionsOf.set(r.cc, [...(regionsOf.get(r.cc) ?? []), i]));
+
+/** What the browser needs per range: country counts, plus region counts keyed by grid region index. */
+interface Shade {
+  key: string;
+  label: string;
+  start: string;
+  total: number;
+  countries: Record<string, number>;
+  /** grid region index → visitors */
+  rc: Record<string, number>;
+  /** countries shaded by region */
+  byRegion: string[];
+}
+function shade(r: VisitorRange): Shade {
+  const rc: Record<string, number> = {};
+  const byRegion: string[] = [];
+  for (const [cc, names] of Object.entries(r.regions ?? {})) {
+    const idx = regionsOf.get(cc) ?? [];
+    let matched = false;
+    for (const [name, n] of Object.entries(names)) {
+      const k = regionKey(name);
+      if (!k) continue;
+      let hits = idx.filter((i) => regions[i].names.includes(k));
+      if (!hits.length) hits = idx.filter((i) => regions[i].groups.includes(k)); // e.g. England, Île-de-France
+      for (const i of hits) rc[i] = (rc[i] ?? 0) + n;
+      if (hits.length) matched = true;
+    }
+    if (matched) byRegion.push(cc);
+  }
+  return { key: r.key, label: r.label, start: r.start, total: r.total, countries: r.countries, rc, byRegion };
+}
+
+const GLYPHS = ['·', ':', '+', '*', '#'];
+const level = (n: number, max: number) => (n > 0 ? Math.max(1, Math.min(4, Math.ceil((4 * Math.log1p(n)) / Math.log1p(max)))) : 0);
+
+const ranges = (stats?.ranges ?? []).map(shade);
+const initial = ranges.find((r) => r.key === 'all') ?? ranges[0];
+const counts = initial?.countries ?? {};
+const regional = new Set(initial?.byRegion ?? []);
+const unit = (cc: string, r: number) => (regional.has(cc) ? (initial?.rc[r] ?? 0) : (counts[cc] ?? 0));
+const max = Math.max(
+  1,
+  ...Object.entries(counts).filter(([cc]) => !regional.has(cc)).map(([, n]) => n),
+  ...Object.values(initial?.rc ?? {}),
+);
+
+// rows of the map as HTML: ocean is spaces, each run of one country (and province) is a span
+const map = (grid.cells as [number, number, number, number][][])
+  .map((runs) => {
+    let html = '';
+    let col = 0;
+    for (const [c, len, i, r] of runs) {
+      html += ' '.repeat(c - col);
+      const cc = grid.codes[i];
+      const l = level(unit(cc, r), max);
+      html += `<span data-c="${cc}"${r >= 0 ? ` data-r="${r}"` : ''} data-l="${l}">${GLYPHS[l].repeat(len)}</span>`;
+      col = c + len;
+    }
+    return html + ' '.repeat(grid.cols - col);
+  })
+  .join('\n');
+
+const names = new Intl.DisplayNames(['en'], { type: 'region' });
+const nameOf = (cc: string) => {
+  try {
+    return names.of(cc) ?? cc;
+  } catch {
+    return cc;
+  }
+};
+const fmt = new Intl.NumberFormat('en');
+const top = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+const topMax = Math.max(1, ...Object.values(counts));
+const payload = JSON.stringify({ ranges, since: site.statsSince });
+const defaultRanges = [
+  { key: 'd30', label: 'Past 30 days' },
+  { key: 'all', label: 'All time' },
+];
+---
+{show && (
+  <section class="section visitors" id="visitors" aria-labelledby="visitors-title" data-visitors>
+    <div class="section-head">
+      <h2 id="visitors-title">Visitors</h2>
+      <div class="seg meta" role="group" aria-label="Time range" data-vrange>
+        {(ranges.length ? ranges : defaultRanges).map((r) => (
+          <button type="button" data-range={r.key} aria-pressed={r.key === (initial?.key ?? 'all') ? 'true' : 'false'}>{r.label}</button>
+        ))}
+      </div>
+    </div>
+
+    <p class="visitors__summary" data-vsummary>
+      {initial
+        ? initial.total
+          ? `${fmt.format(initial.total)} visitors from ${top.length} ${top.length === 1 ? 'country' : 'countries'} since ${longDate(new Date(`${initial.start}T12:00:00Z`))}.`
+          : 'No visitors counted yet.'
+        : 'Statistics will appear here once counting is set up.'}
+    </p>
+
+    <figure class="vmap" data-vmap>
+      <pre aria-hidden="true" style={`--cols:${grid.cols};--aspect:${grid.aspect}`} set:html={map} />
+      <div class="vmap__tip" role="status" aria-live="polite" hidden data-vtip></div>
+      <figcaption class="sr-only">World map shaded by the number of visitors, by province where known; the list below gives the numbers per country.</figcaption>
+    </figure>
+
+    <div class="vlist-wrap" data-collapsed="true">
+      <ol class="vlist" data-vlist>
+        {top.map(([cc, n]) => (
+          <li data-c={cc} tabindex="0">
+            <span class="vlist__name">{nameOf(cc)}</span>
+            <span class="vlist__bar" aria-hidden="true"><i style={`--w:${n / topMax}`}></i></span>
+            <span class="vlist__n">{fmt.format(n)}</span>
+          </li>
+        ))}
+      </ol>
+      <button class="text-btn meta" type="button" data-vmore hidden aria-expanded="false"></button>
+    </div>
+
+    <p class="meta visitors__note">
+      {stats ? (
+        <Fragment>Counted with <a href="https://www.goatcounter.com/" rel="noopener">GoatCounter</a>, which sets no cookies. Numbers are per country; the map shades provinces where the location is known. Updated {longDate(new Date(stats.updated))}.</Fragment>
+      ) : (
+        <Fragment>Development preview: no statistics. Set <code>site.goatcounter</code> in <code>src/data/site.ts</code> and the <code>GOATCOUNTER_TOKEN</code> environment variable (README → Visitor map). Add <code>?demo</code> to the URL to try the map with made-up numbers. This section is left out of the built site until data exists.</Fragment>
+      )}
+    </p>
+    <script type="application/json" data-vdata set:html={payload} />
+  </section>
+)}
+
+<script>
+  interface Shade {
+    key: string;
+    label: string;
+    start: string;
+    total: number;
+    countries: Record<string, number>;
+    rc: Record<string, number>;
+    byRegion: string[];
+  }
+
+  const GLYPHS = ['·', ':', '+', '*', '#'];
+  const SHOW = 10;
+  const level = (n: number, max: number) => (n > 0 ? Math.max(1, Math.min(4, Math.ceil((4 * Math.log1p(n)) / Math.log1p(max)))) : 0);
+  const fmt = new Intl.NumberFormat('en');
+  const names = new Intl.DisplayNames(['en'], { type: 'region' });
+  const nameOf = (cc: string) => {
+    try {
+      return names.of(cc) ?? cc;
+    } catch {
+      return cc;
+    }
+  };
+  const longDate = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+  /** development only: made-up numbers to preview the map (region shading for a few large countries) */
+  function demo(since: string, regionsOf: Map<string, Set<string>>): Shade[] {
+    const ccs = ['US', 'CN', 'IN', 'DE', 'GB', 'JP', 'KR', 'CA', 'FR', 'BR', 'AU', 'SG', 'NL', 'IT', 'ES', 'SE', 'CH', 'TW', 'HK', 'RU', 'MX', 'IL', 'PL', 'TR', 'ZA', 'NG', 'EG', 'AR', 'VN', 'ID'];
+    const sum = (o: Record<string, number>) => Object.values(o).reduce((a, b) => a + b, 0);
+    const make = (key: string, label: string, start: string, scale: number): Shade => {
+      const countries = Object.fromEntries(ccs.map((c, i) => [c, Math.max(1, Math.round(((scale * 900) / (i + 1) ** 1.25) * (0.6 + Math.random() * 0.8)))]));
+      const rc: Record<string, number> = {};
+      const byRegion = ['US', 'CN', 'IN', 'DE', 'CA', 'BR', 'AU'];
+      for (const cc of byRegion) {
+        const rs = [...(regionsOf.get(cc) ?? [])];
+        for (const r of rs) if (Math.random() < 0.45) rc[r] = Math.max(1, Math.round((countries[cc] / rs.length) * 4 * Math.random() ** 2));
+      }
+      return { key, label, start, total: sum(countries), countries, rc, byRegion };
+    };
+    return [make('d30', 'Past 30 days', new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10), 0.25), make('all', 'All time', since, 1)];
+  }
+
+  function init() {
+    const found = document.querySelector<HTMLElement>('[data-visitors]');
+    if (!found || found.dataset.bound) return;
+    const box: HTMLElement = found;
+    box.dataset.bound = '1';
+
+    const fig = box.querySelector<HTMLElement>('[data-vmap]')!;
+    const pre = fig.querySelector('pre')!;
+    const tip = box.querySelector<HTMLElement>('[data-vtip]')!;
+    const list = box.querySelector<HTMLOListElement>('[data-vlist]')!;
+    const more = box.querySelector<HTMLButtonElement>('[data-vmore]')!;
+    const wrap = list.parentElement as HTMLElement;
+    const summary = box.querySelector<HTMLElement>('[data-vsummary]')!;
+
+    // spans by country; province indices per country (for the demo data)
+    const byCountry = new Map<string, HTMLElement[]>();
+    const regionsOf = new Map<string, Set<string>>();
+    pre.querySelectorAll<HTMLElement>('span[data-c]').forEach((s) => {
+      const cc = s.dataset.c!;
+      if (!byCountry.has(cc)) byCountry.set(cc, []);
+      byCountry.get(cc)!.push(s);
+      if (s.dataset.r) {
+        if (!regionsOf.has(cc)) regionsOf.set(cc, new Set());
+        regionsOf.get(cc)!.add(s.dataset.r);
+      }
+    });
+
+    const data = JSON.parse(box.querySelector('[data-vdata]')?.textContent || '{}') as { ranges: Shade[]; since: string };
+    if (import.meta.env.DEV && new URLSearchParams(location.search).has('demo')) data.ranges = demo(data.since, regionsOf);
+
+    let range: Shade | undefined;
+
+    function render(key?: string) {
+      clear();
+      range = data.ranges.find((r) => r.key === key) ?? data.ranges.find((r) => r.key === 'all') ?? data.ranges[0];
+      if (!range) return;
+      box.querySelectorAll<HTMLButtonElement>('[data-range]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.range === range!.key)));
+      const { countries, rc } = range;
+      const regional = new Set(range.byRegion);
+      const max = Math.max(1, ...Object.entries(countries).filter(([cc]) => !regional.has(cc)).map(([, n]) => n), ...Object.values(rc));
+      byCountry.forEach((arr, cc) => {
+        for (const s of arr) {
+          const v = regional.has(cc) ? (s.dataset.r ? (rc[s.dataset.r] ?? 0) : 0) : (countries[cc] ?? 0);
+          const l = String(level(v, max));
+          if (s.dataset.l !== l) {
+            s.dataset.l = l;
+            s.textContent = GLYPHS[Number(l)].repeat(s.textContent!.length);
+          }
+        }
+      });
+      const top = Object.entries(countries).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      const topMax = Math.max(1, ...Object.values(countries));
+      const n = top.length;
+      summary.textContent = range.total
+        ? `${fmt.format(range.total)} visitors from ${n} ${n === 1 ? 'country' : 'countries'} ${range.key === 'd30' ? 'in the past 30 days' : `since ${longDate(range.start)}`}.`
+        : 'No visitors counted yet.';
+      list.replaceChildren(
+        ...top.map(([cc, v]) => {
+          const li = document.createElement('li');
+          li.dataset.c = cc;
+          li.tabIndex = 0;
+          const name = document.createElement('span');
+          name.className = 'vlist__name';
+          name.textContent = nameOf(cc);
+          const bar = document.createElement('span');
+          bar.className = 'vlist__bar';
+          bar.setAttribute('aria-hidden', 'true');
+          const i = document.createElement('i');
+          i.style.setProperty('--w', String(v / topMax));
+          bar.append(i);
+          const num = document.createElement('span');
+          num.className = 'vlist__n';
+          num.textContent = fmt.format(v);
+          li.append(name, bar, num);
+          return li;
+        }),
+      );
+      more.hidden = n <= SHOW;
+      wrap.dataset.collapsed = 'true';
+      more.setAttribute('aria-expanded', 'false');
+      more.textContent = `Show all ${n} countries`;
+    }
+
+    // ---- hover: the whole country lights up (the province shading is only for the resting map)
+    // drawn with one glyph for the country's own total, so no province pattern shows through
+    let hot: string | null = null;
+    function highlight(cc: string | null) {
+      if (cc === hot) return;
+      if (hot)
+        byCountry.get(hot)?.forEach((s) => {
+          s.classList.remove('is-hot');
+          if (s.dataset.g !== undefined) s.textContent = s.dataset.g;
+          delete s.dataset.g;
+        });
+      list.querySelectorAll('.is-hot').forEach((li) => li.classList.remove('is-hot'));
+      hot = cc;
+      if (!cc) return;
+      const counts = range?.countries ?? {};
+      const g = GLYPHS[level(counts[cc] ?? 0, Math.max(1, ...Object.values(counts)))];
+      byCountry.get(cc)?.forEach((s) => {
+        s.dataset.g = s.textContent ?? '';
+        s.textContent = g.repeat(s.dataset.g.length);
+        s.classList.add('is-hot');
+      });
+      list.querySelector(`li[data-c="${cc}"]`)?.classList.add('is-hot');
+    }
+    function showTip(cc: string, x: number, y: number) {
+      const n = range?.countries[cc] ?? 0;
+      const total = range?.total ?? 0;
+      const strong = document.createElement('strong');
+      strong.textContent = n ? `${fmt.format(n)} ${n === 1 ? 'visitor' : 'visitors'}` : 'No visitors yet';
+      const name = document.createElement('span');
+      name.textContent = n && total ? `${nameOf(cc)} · ${Math.max(1, Math.round((100 * n) / total))}%` : nameOf(cc);
+      tip.replaceChildren(strong, name);
+      tip.hidden = false;
+      const fr = fig.getBoundingClientRect();
+      const w = tip.offsetWidth;
+      const left = Math.min(Math.max(x - fr.left - w / 2, 0), fr.width - w);
+      const top = y - fr.top - tip.offsetHeight - 12;
+      tip.style.transform = `translate(${left}px, ${top < 0 ? y - fr.top + 16 : top}px)`;
+    }
+    function clear() {
+      tip.hidden = true;
+      highlight(null);
+    }
+    function point(e: PointerEvent) {
+      const s = (e.target as Element).closest<HTMLElement>('span[data-c]');
+      if (!s) return clear();
+      highlight(s.dataset.c!);
+      showTip(s.dataset.c!, e.clientX, e.clientY);
+    }
+
+    pre.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'mouse') point(e);
+    });
+    pre.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'mouse') clear();
+    });
+    // touch: tap a country to show it, tap the sea to clear
+    pre.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') point(e);
+    });
+
+    function fromList(li: HTMLElement | null) {
+      if (!li?.dataset.c) return clear();
+      highlight(li.dataset.c);
+      const cells = byCountry.get(li.dataset.c);
+      if (cells?.length) {
+        const rect = cells[Math.floor(cells.length / 2)].getBoundingClientRect();
+        showTip(li.dataset.c, rect.left + rect.width / 2, rect.top);
+      } else tip.hidden = true;
+    }
+    list.addEventListener('pointerover', (e) => fromList((e.target as Element).closest<HTMLElement>('li')));
+    list.addEventListener('pointerleave', clear);
+    list.addEventListener('focusin', (e) => fromList((e.target as Element).closest<HTMLElement>('li')));
+    list.addEventListener('focusout', clear);
+
+    more.addEventListener('click', () => {
+      const collapsed = wrap.dataset.collapsed === 'true';
+      wrap.dataset.collapsed = String(!collapsed);
+      more.setAttribute('aria-expanded', String(collapsed));
+      more.textContent = collapsed ? 'Show fewer' : `Show all ${list.children.length} countries`;
+    });
+
+    box.querySelectorAll<HTMLButtonElement>('[data-range]').forEach((b) => b.addEventListener('click', () => render(b.dataset.range)));
+
+    // ---- fit the glyph grid to the board width (monospace advance differs per platform)
+    const cols = Number(getComputedStyle(pre).getPropertyValue('--cols')) || 200;
+    const aspect = Number(getComputedStyle(pre).getPropertyValue('--aspect')) || 1.6;
+    function fit() {
+      const avail = fig.clientWidth;
+      if (!avail) return;
+      pre.style.fontSize = '10px';
+      const advance = pre.scrollWidth / cols; // px per glyph at 10px
+      const size = (10 * avail) / pre.scrollWidth;
+      pre.style.fontSize = `${size}px`;
+      pre.style.lineHeight = `${(advance * size * aspect) / 10}px`;
+    }
+    new ResizeObserver(fit).observe(fig);
+    fit();
+    render();
+  }
+
+  document.addEventListener('astro:page-load', init);
+</script>

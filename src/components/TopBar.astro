@@ -29,9 +29,13 @@ const blogLinks = [
     <nav class="capsule" data-active={section} aria-label="Site section">
       <a href="/" data-seg="academic" aria-current={section === 'academic' ? 'page' : undefined}>About</a>
       <a href="/blog/" data-seg="blog" aria-current={section === 'blog' ? 'page' : undefined}>Blog</a>
-      <a href="/conference/" data-seg="conference" aria-current={section === 'conference' ? 'page' : undefined}>Conference</a>
-      <a href="/dev/" data-seg="dev" aria-current={section === 'dev' ? 'page' : undefined}>Dev</a>
-      <a href="/exposure/" data-seg="exposure" aria-current={section === 'exposure' ? 'page' : undefined}>Exposure</a>
+      {/* below 450px the data-fold segments fold into the "more" button, except the current one */}
+      <a href="/conference/" data-seg="conference" data-fold aria-current={section === 'conference' ? 'page' : undefined}>Conference</a>
+      <a href="/dev/" data-seg="dev" data-fold aria-current={section === 'dev' ? 'page' : undefined}>Dev</a>
+      <a href="/exposure/" data-seg="exposure" data-fold aria-current={section === 'exposure' ? 'page' : undefined}>Exposure</a>
+      <button class="capsule__more" type="button" data-capsule-more aria-expanded="false" aria-label="More sections" title="More sections">
+        <Icon name="more" />
+      </button>
       <span class="capsule__thumb" aria-hidden="true"></span>
     </nav>
     <div class="topbar__tools">
@@ -62,6 +66,68 @@ const blogLinks = [
     }
   }
 
+  // Below 450px Conference, Dev and Exposure fold into the "more" button (the current one stays).
+  const narrow = matchMedia('(max-width: 449px)');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const MORPH = { duration: 320, easing: 'cubic-bezier(0.2, 0, 0, 1)' };
+
+  function setOpen(capsule: HTMLElement, open: boolean) {
+    capsule.classList.toggle('is-open', open);
+    capsule.querySelector('[data-capsule-more]')?.setAttribute('aria-expanded', String(open));
+  }
+  function setCurrent(capsule: HTMLElement, seg: string) {
+    capsule.dataset.active = seg;
+    capsule.querySelectorAll<HTMLAnchorElement>('a[data-seg]').forEach((a) => {
+      if (a.dataset.seg === seg) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+  }
+
+  /** change which segments show, then let segments, thumb and capsule glide from where they were */
+  function morph(capsule: HTMLElement, change: () => void) {
+    if (!narrow.matches || reduceMotion.matches || !capsule.classList.contains('is-ready')) {
+      change();
+      placeThumb();
+      return;
+    }
+    const items = [...capsule.querySelectorAll<HTMLElement>('a[data-seg], [data-capsule-more]')];
+    const thumb = capsule.querySelector<HTMLElement>('.capsule__thumb')!;
+    const r0 = items.map((el) => el.getBoundingClientRect());
+    const t0 = thumb.getBoundingClientRect();
+    const w0 = capsule.getBoundingClientRect().width;
+    capsule.classList.add('is-snapping'); // the thumb's own transition would override the animation below
+    change();
+    placeThumb();
+    const t1 = thumb.getBoundingClientRect();
+    const w1 = capsule.getBoundingClientRect().width;
+    capsule.classList.remove('is-snapping');
+
+    capsule.classList.add('is-animating');
+    capsule.animate([{ width: `${w0}px` }, { width: `${w1}px` }], MORPH).finished.finally(() => {
+      if (!capsule.getAnimations().some((a) => a.playState === 'running')) capsule.classList.remove('is-animating');
+    });
+    if (t0.width && t1.width) {
+      const x = parseFloat(capsule.style.getPropertyValue('--thumb-x')) || 0;
+      thumb.animate(
+        [
+          { transform: `translateX(${x + t0.left - t1.left}px)`, width: `${t0.width}px` },
+          { transform: `translateX(${x}px)`, width: `${t1.width}px` },
+        ],
+        MORPH,
+      );
+    }
+    items.forEach((el, i) => {
+      const r1 = el.getBoundingClientRect();
+      if (!r1.width) return; // folded away
+      if (r0[i].width) {
+        const dx = r0[i].left - r1.left;
+        if (Math.abs(dx) > 0.5) el.animate([{ transform: `translateX(${dx}px)` }, { transform: 'none' }], MORPH);
+      } else {
+        el.animate([{ opacity: 0 }, { opacity: 1 }], { ...MORPH, delay: 80, fill: 'backwards' }); // newly shown
+      }
+    });
+  }
+
   function sync() {
     const p = location.pathname;
     const seg = p.startsWith('/blog')
@@ -75,12 +141,16 @@ const blogLinks = [
             : 'academic';
     const capsule = document.querySelector<HTMLElement>('.capsule');
     if (capsule) {
-      capsule.dataset.active = seg;
-      capsule.querySelectorAll<HTMLAnchorElement>('a[data-seg]').forEach((a) => {
-        if (a.dataset.seg === seg) a.setAttribute('aria-current', 'page');
-        else a.removeAttribute('aria-current');
-      });
-      placeThumb();
+      const current = capsule.querySelector<HTMLElement>('a[aria-current="page"]')?.dataset.seg;
+      if (current !== seg || capsule.classList.contains('is-open')) {
+        morph(capsule, () => {
+          setCurrent(capsule, seg);
+          setOpen(capsule, false);
+        });
+      } else {
+        capsule.dataset.active = seg;
+        placeThumb();
+      }
     }
     const nav = document.querySelector<HTMLElement>('[data-sections]');
     if (nav) nav.hidden = !(document.body.dataset.stage === 'academic');
@@ -102,6 +172,7 @@ const blogLinks = [
 
   // respond on press, not on release
   document.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const seg = (e.target as Element).closest<HTMLAnchorElement>('.capsule a[data-seg]');
     const capsule = seg?.closest<HTMLElement>('.capsule');
     if (seg && capsule && seg.dataset.seg) {
@@ -115,6 +186,24 @@ const blogLinks = [
 
   document.addEventListener('click', (e) => {
     const t = e.target as Element;
+    const open = document.querySelector<HTMLElement>('.capsule.is-open');
+    if (t.closest('[data-capsule-more]')) {
+      const capsule = t.closest<HTMLElement>('.capsule')!;
+      morph(capsule, () => setOpen(capsule, true));
+      // from the keyboard, move focus to the first segment that just appeared
+      if (e.detail === 0) capsule.querySelector<HTMLElement>('a[data-fold]:not([aria-current])')?.focus();
+      return;
+    }
+    if (open) {
+      const seg = t.closest<HTMLAnchorElement>('.capsule a[data-seg]');
+      const follows = seg && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey);
+      if (seg || !t.closest('.capsule')) {
+        morph(open, () => {
+          if (follows && seg.dataset.seg) setCurrent(open, seg.dataset.seg);
+          setOpen(open, false);
+        });
+      }
+    }
     if (t.closest('[data-theme-toggle]')) {
       const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
       root.dataset.theme = next;
@@ -128,6 +217,24 @@ const blogLinks = [
       window.dispatchEvent(new CustomEvent('motionchange', { detail: off ? 'off' : 'on' }));
       sync();
     }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const open = document.querySelector<HTMLElement>('.capsule.is-open');
+    if (e.key !== 'Escape' || !open) return;
+    const inside = open.contains(document.activeElement);
+    morph(open, () => setOpen(open, false));
+    if (inside) open.querySelector<HTMLElement>('[data-capsule-more]')?.focus();
+  });
+  document.addEventListener('focusout', (e) => {
+    const open = (e.target as Element).closest?.<HTMLElement>('.capsule.is-open');
+    const next = e.relatedTarget as Element | null;
+    if (open && next && !open.contains(next)) morph(open, () => setOpen(open, false));
+  });
+  narrow.addEventListener('change', () => {
+    const open = document.querySelector<HTMLElement>('.capsule.is-open');
+    if (open) setOpen(open, false);
+    placeThumb();
   });
 
   // scroll-spy for the section links (academic page only)

@@ -18,7 +18,8 @@
 .capsule {
   position: relative;
   display: inline-grid;
-  grid-template-columns: repeat(5, auto); /* each segment as wide as its label */
+  grid-auto-flow: column; /* each segment as wide as its label; folded ones take no column */
+  justify-content: start;
   align-items: center;
   padding: 3px;
   border-radius: 999px;
@@ -47,6 +48,7 @@
 }
 .capsule a:hover {
   color: var(--ink);
+  text-decoration: none; /* base.css loads later and underlines a:hover */
 }
 .capsule a:active {
   transform: scale(0.97);
@@ -85,6 +87,56 @@
     height: 34px;
     padding: 0 0.5rem;
     font-size: 0.8125rem;
+  }
+}
+
+/* below 450px the five labels no longer fit beside the buttons: Conference, Dev and Exposure fold into
+   a "more" button (the current one stays), and a tap opens the full capsule over the buttons */
+.capsule__more {
+  display: none;
+}
+.capsule.is-animating {
+  overflow: clip;
+}
+.capsule.is-snapping .capsule__thumb {
+  transition: none;
+}
+@media (max-width: 449px) {
+  .capsule:not(.is-open) a[data-fold]:not([aria-current="page"]),
+  .capsule.is-open .capsule__more {
+    display: none;
+  }
+  .capsule__more {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: color var(--dur-ui) var(--ease), transform var(--dur-press) ease-out;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .capsule__more:hover {
+    color: var(--ink);
+  }
+  .capsule__more:active {
+    transform: scale(0.94);
+  }
+  .capsule__more svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+/* the opened capsule spans the whole bar on the smallest phones */
+@media (max-width: 359px) {
+  .capsule a {
+    padding: 0 0.375rem;
   }
 }
 

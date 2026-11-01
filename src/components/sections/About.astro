@@ -1,9 +1,11 @@
 ---
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { profile } from '../../data/profile';
-// Portrait slot: public/photo.{jpg,png,webp}; an empty frame until a file is added.
-const photo = ['photo.jpg', 'photo.png', 'photo.webp'].find((f) => existsSync(join(process.cwd(), 'public', f)));
+// Portrait slot: src/assets/photo.{jpg,png,webp}. Astro resizes it and serves WebP at build time, so the
+// original can stay full size. An empty frame until a file is added.
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/photo.{jpg,jpeg,png,webp}', { eager: true });
+const photo = Object.values(photos)[0]?.default;
 ---
 <section class="hero" id="about" aria-labelledby="about-title">
   <div class="hero__text">
@@ -24,7 +26,14 @@ const photo = ['photo.jpg', 'photo.png', 'photo.webp'].find((f) => existsSync(jo
 
   <aside class="hero__side" aria-label="Photo and address">
     {photo ? (
-      <img class="hero__photo" src={`/${photo}`} alt={`Portrait of ${profile.name}`} width="480" height="600" />
+      <Image
+        class="hero__photo"
+        src={photo}
+        alt={`Portrait of ${profile.name}`}
+        widths={[240, 480, 720]}
+        sizes="(max-width: 899px) 7.5rem, 17rem"
+        loading="eager"
+      />
     ) : (
       <div class="hero__photo hero__photo--empty meta" aria-hidden="true">Photo</div>
     )}

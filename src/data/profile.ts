@@ -10,7 +10,7 @@ export const profile = {
   advisor: { name: 'Prof. Jiajun Huang' },
   location: 'Tampa, FL',
   email: 'jiefeng@usf.edu',
-  // Portrait: drop a file at public/photo.jpg (or .png / .webp); until then an empty frame is shown.
+  // Portrait: src/assets/photo.webp (or .png / .jpg, only one); without one an empty frame is shown.
   // Mailing address shown under the photo. Add your building / office line (e.g. 'ENB 3xx') when you have it.
   address: [
     'Department of Computer Science and Engineering',

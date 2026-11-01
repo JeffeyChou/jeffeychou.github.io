@@ -255,6 +255,13 @@ body[data-stage="article"] .stage {
   color: var(--ink);
   text-decoration: none;
 }
+/* About, where the section links show (≥1200px): the page's heading is the name, and the bar has no
+   room for both the name and News / Publications / Experience beside the five-segment capsule */
+@media (min-width: 1200px) {
+  .topbar__left:has([data-sections]:not([hidden])) .topbar__name {
+    display: none;
+  }
+}
 .sections {
   display: flex;
   gap: 1rem;
@@ -333,8 +340,8 @@ body[data-stage="article"] .stage {
     height: 40px;
   }
 }
-/* the smallest phones: room for the five sections (reduced motion still pauses via the OS setting) */
-@media (max-width: 340px) {
+/* the smallest phones: room for the folded capsule (reduced motion still pauses via the OS setting) */
+@media (max-width: 359px) {
   [data-motion-toggle] {
     display: none;
   }
@@ -349,6 +356,25 @@ body[data-stage="article"] .stage {
   }
   .topbar__inner .capsule {
     justify-self: start;
+  }
+}
+@media (max-width: 449px) {
+  /* capsule and buttons share one cell, so the opened capsule covers the buttons instead of pushing them */
+  .topbar__inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .topbar__inner .capsule {
+    grid-area: 1 / 1;
+    z-index: 1;
+  }
+  .topbar__tools {
+    grid-area: 1 / 1;
+    transition: opacity var(--dur-ui) var(--ease), visibility 0s;
+  }
+  .topbar__inner:has(.capsule.is-open) .topbar__tools {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--dur-ui) var(--ease), visibility 0s linear var(--dur-ui);
   }
 }
 
@@ -469,6 +495,7 @@ main {
 }
 .hero__photo {
   width: 100%;
+  height: auto; /* the img's width/height attributes would otherwise override the 4:5 frame */
   aspect-ratio: 4 / 5;
   border-radius: 18px;
   object-fit: cover;

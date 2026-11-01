@@ -47,7 +47,7 @@ The page's section order and headings are in `src/components/sections/` (`About.
 
 ### Your photo
 
-Put a portrait at **`public/photo.jpg`** (or `photo.png` / `photo.webp`). It is detected automatically at build time, and until then an empty frame is shown. The frame is 4:5, so an image of about 800 × 1000 px looks best.
+Put a portrait at **`src/assets/photo.webp`** (or `photo.png` / `photo.jpg`; keep only one). It is detected at build time and served as resized WebP, so the original can stay full size; without one an empty frame is shown. The frame is 4:5 and crops to the centre, so keep the face near the middle.
 
 ### Your CV
 
@@ -117,7 +117,7 @@ Add any of these optional fields to an entry. biblatex ignores them, and the web
 
 Each note gets a tag page at `/blog/tags/<tag>/`, and the RSS feed at `/rss.xml` updates automatically. The list of tags on the Notes page appears once there are five or more notes.
 
-`src/content/blog/ring-allreduce-cost.md` is a working example; edit or delete it.
+The folder is empty for now (`.gitkeep` keeps it in git); the Notes page shows "No notes yet." until the first note is added.
 
 ---
 
@@ -335,7 +335,8 @@ src/data/deadlines.ts          conference deadlines (/conference/)
 src/data/site.ts               GoatCounter code for the visitor map
 src/content/blog/*.md          notes
 src/content/projects/*.md      Dev projects (one post per project)
-public/                        photo.jpg, cv.pdf, papers/, notes/<slug>/ images, favicon
+src/assets/photo.webp          portrait on the About page (optimised at build time)
+public/                        cv.pdf, papers/, notes/<slug>/ images, favicon
 src/components/sections/       the About page sections
 src/layouts/                   page shell (Base.astro) and note layout (Post.astro)
 src/styles/                    tokens, base, glass, prose

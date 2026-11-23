@@ -107,6 +107,7 @@ export class Stage {
   private last = 0;
   private time = 0;
   private lastRender = 0;
+  private lastTick = 0;
   private dirty = true;
   private debug: StageDebug;
   private lastCreature = 0;
@@ -419,9 +420,13 @@ export class Stage {
     if (this.running || document.hidden) return;
     this.running = true;
     this.last = performance.now();
+    this.lastTick = 0;
     const loop = (now: number) => {
       if (!this.running) return;
       this.raf = requestAnimationFrame(loop);
+      // cap at 60 Hz: on 120/144 Hz screens every other callback is skipped
+      if (now - this.lastTick < FRAME_MS * 0.9) return;
+      this.lastTick = now;
       this.frame(now);
     };
     this.raf = requestAnimationFrame(loop);
@@ -505,7 +510,7 @@ export class Stage {
     if (b !== a) this.advance(b, k);
     // every page but About: once the creature has left the screen, a different one arrives
     if (left && !this.trans && this.mode !== 'academic' && dbg.creature === undefined) {
-      const options = [0, 1, 2, 3].filter((i) => i !== a);
+      const options = ACTIVE.filter((i) => i !== a);
       const next = options[Math.floor(Math.random() * options.length)];
       this.movers[next].enter(this.edge(next));
       this.shown = next;
@@ -518,6 +523,7 @@ export class Stage {
     let steps = Math.floor(this.waveAcc / WAVE.step);
     this.waveAcc -= steps * WAVE.step;
     if (steps > 4) steps = 4;
+    if (!RIPPLES) steps = 0;
 
     const pose = 0.6;
     const changed =
@@ -716,6 +722,16 @@ const GLYPH = { contrast: 1.3, gain: 0.55, gamma: 1.6, edge: [0.35, 0.75] as con
  * (realistic, slow decay); extra damping/smoothing made them look worse.
  */
 const WAVE = { step: 1 / 60, c2: 0.14, damp: 0.985, gain: 0.2 };
+/**
+ * 2026-11-23: the creature-driven ripple medium is off. The background is a slowly drifting field of
+ * irregular blobs instead (cellFrag, "the field"), after the ASCII background of wandrop. Set true
+ * (and restore the ripple branch in cellFrag from git) to bring the ripples back.
+ */
+const RIPPLES = false;
+/** Frame budget: the stage renders at most 60 times a second. */
+const FRAME_MS = 1000 / 60;
+/** Creatures that appear (goldfish, jellyfish, butterfly); the dragonfly (1) is retired. */
+export const ACTIVE = [0, 2, 3];
 
 const _focus = new Vector3();
 const _right = new Vector3();
@@ -723,7 +739,8 @@ const _up = new Vector3();
 const _toCam = new Vector3();
 /** relative size per creature (goldfish, dragonfly, jellyfish, butterfly) */
 // dragonfly 1.7: it is thin, so at 1 it read clearly smaller than the others (box ≈ 0.5× the goldfish's)
-const SIZE = [1.5, 1.7, 1.5, 1];
+// 2026-11-23: everything drawn about 25% smaller (was 1.5, 1.7, 1.5, 1)
+const SIZE = [1.1, 1.3, 1.1, 0.75];
 /** animation clock rate per creature (goldfish, dragonfly, jellyfish, butterfly): slower overall, wings much slower */
 // astra's v3 timing is authored in real seconds; the owner wants everything calmer, so run it at 60%,
 // and the three crossers at 50% (their travel was slowed too, so strokes and travel stay in step)

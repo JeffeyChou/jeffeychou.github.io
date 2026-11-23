@@ -1,5 +1,5 @@
 ---
-import { profile, experience, education, awards, service } from '../../data/profile';
+import { profile, experience, education, teaching, awards, service } from '../../data/profile';
 const year = new Date().getFullYear();
 ---
 <section class="section" id="experience" aria-labelledby="experience-title">
@@ -27,6 +27,18 @@ const year = new Date().getFullYear();
             <b>{x.org}</b>
             <span class="muted">{x.role} · {x.place}</span>
           </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="subsection" id="teaching">
+    <h2>Teaching</h2>
+    <ul class="rows rows--two">
+      {teaching.map((t) => (
+        <li>
+          <span class="meta when">{t.date}</span>
+          <div class="what"><b>{t.course} {t.title}</b><span class="muted">Teaching Assistant · University of South Florida</span></div>
         </li>
       ))}
     </ul>

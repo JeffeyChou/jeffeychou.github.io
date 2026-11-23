@@ -1,5 +1,6 @@
 // Single source for everything on the Academic page except publications
-// (those come from publications.bib). Content follows resume-2page.tex.
+// (those come from publications.bib). Content follows resume-2page.tex
+// (its public build, resume-2page-public.pdf, is served as public/cv.pdf).
 
 export const profile = {
   name: 'Jiefeng Zhou',
@@ -82,6 +83,26 @@ export const experience: Position[] = [
     dates: '2023–2024',
     detail: 'Four journal papers on evidence theory and information entropy (first author on three).',
   },
+];
+
+// Ongoing work, described by the problem only (no system names, methods, or numbers)
+// until the papers are public. Shown under "Current Projects" after the News.
+export const currentProjects = [
+  {
+    title: 'Faster compressed collectives for GPU clusters',
+    text: 'Collectives such as Allreduce on multi-node GPU clusters are bound by the bandwidth between nodes. Compressing the traffic helps only if compression is cheap enough not to become the new bottleneck, which is where existing compression-enabled GPU collectives fall short. I am working on making them pay off at scale.',
+  },
+  {
+    title: 'Communication for Mixture-of-Experts training',
+    text: 'Large Mixture-of-Experts models spend much of each training step waiting on the all-to-all exchanges that route tokens to experts. I am working on cutting this communication cost without hurting model quality.',
+  },
+];
+
+export const teaching = [
+  { date: 'Fall 2026', course: 'CDA 4205', title: 'Computer Architecture' },
+  { date: 'Spring 2026', course: 'COT 4400', title: 'Analysis of Algorithms' },
+  { date: 'Fall 2025', course: 'CNT 4419', title: 'Secure Coding' },
+  { date: 'Fall 2025', course: 'CIS 3213', title: 'Foundations of Cybersecurity' },
 ];
 
 export const education = [

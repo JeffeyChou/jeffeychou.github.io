@@ -456,6 +456,23 @@ main {
 .rows .what p {
   margin-top: var(--s-1);
 }
+/* two-column rows (Teaching): items fill left to right, a hairline closes each column */
+.rows--two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--s-7);
+}
+.rows--two > li:nth-last-child(2):nth-child(odd) {
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 759px) {
+  .rows--two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .rows--two > li:nth-last-child(2):nth-child(odd) {
+    border-bottom: 0;
+  }
+}
 @media (max-width: 639px) {
   .rows > li {
     grid-template-columns: minmax(0, 1fr);

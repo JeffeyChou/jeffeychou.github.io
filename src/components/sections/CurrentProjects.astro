@@ -1,0 +1,15 @@
+---
+import { currentProjects } from '../../data/profile';
+// What I am working on now: the problem each project tackles, no details until the papers are out.
+---
+<section class="section" id="current" aria-labelledby="current-title">
+  <h2 id="current-title">Current Projects</h2>
+  <ul class="rows">
+    {currentProjects.map((p) => (
+      <li>
+        <span class="meta when">Ongoing</span>
+        <div class="what"><b>{p.title}</b><span class="muted">{p.text}</span></div>
+      </li>
+    ))}
+  </ul>
+</section>

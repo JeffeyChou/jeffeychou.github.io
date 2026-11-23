@@ -98,7 +98,7 @@
   --field-wave: 0.45;
 
   /* visitor map: land without visitors, then one teal hue light → dark by visitor count */
-  --map-0: rgb(28 33 35 / 0.24);
+  --map-0: rgb(28 33 35 / 0.38); /* was 0.24: land without visitors, too close to the page */
   --map-1: oklch(0.8 0.06 185);
   --map-2: oklch(0.66 0.08 185);
   --map-3: oklch(0.52 0.09 185);
@@ -137,7 +137,7 @@
   --field-alpha: 0.12;
   --field-wave: 0.4;
 
-  --map-0: rgb(231 236 234 / 0.22);
+  --map-0: rgb(231 236 234 / 0.38); /* was 0.22 */
   --map-1: oklch(0.45 0.06 180);
   --map-2: oklch(0.6 0.08 180);
   --map-3: oklch(0.75 0.09 180);

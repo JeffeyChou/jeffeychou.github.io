@@ -85,7 +85,6 @@ async function runFallback(): Promise<void> {
 // ------------------------------------------------------------ which creature per page
 
 const GOLDFISH = 0;
-const DRAGONFLY = 1;
 const JELLYFISH = 2;
 const BUTTERFLY = 3;
 /** About: always the jellyfish. Every other page: a random creature, and the stage swaps in a
@@ -97,7 +96,8 @@ function creatureFor(mode: StageMode, current: number): number {
   lastMode = mode;
   if (mode === 'academic') return JELLYFISH;
   if (from !== null && from !== 'academic') return current;
-  const options = [GOLDFISH, DRAGONFLY, JELLYFISH, BUTTERFLY].filter((i) => from === null || i !== current);
+  // the dragonfly is retired (stage.ts ACTIVE)
+  const options = [GOLDFISH, JELLYFISH, BUTTERFLY].filter((i) => from === null || i !== current);
   return options[Math.floor(Math.random() * options.length)];
 }
 function pickBlogCreature(s: Stage): void {

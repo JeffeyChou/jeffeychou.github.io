@@ -246,6 +246,9 @@ float dist(int i, vec3 sa, vec3 sb, float mu, float k) {
   return 6.0 * dm * dm + k * (dot(ea, ea) + dot(eb, eb)) + (1.0 - k) * (1.0 - info.y) * 0.05;
 }
 
+// drift rate of the blob field (noise units per second); lower is calmer
+const float BLOB_SPEED = 0.2;
+
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
   p += dot(p, p + 45.32);
@@ -299,42 +302,24 @@ void main() {
     }
   }
 
-  // ---- the medium
+  // ---- the field: irregular blobs that drift, swell and fade slowly (after wandrop's ASCII
+  // background). Filled from the core out (~ then - then ·), so a blob never leaves a hollow ring.
   outColor = vec4(0.0);
   if (uField.w < 0.5) return;
-  vec2 t = 1.0 / uSize;
-  vec2 uv = (cell + 0.5) * t;
-  vec4 wv = texture(uWave, uv);
-  // right against the body the medium stays quiet, so the outline is not blurred by a halo
-  float quiet = 1.0 - smoothstep(0.02, 0.2, wv.b);
-  float h = wv.r * uField.y * quiet;
-  vec2 grad = 0.5 * uField.y * quiet *
-    vec2(texture(uWave, uv + vec2(t.x, 0.0)).r - texture(uWave, uv - vec2(t.x, 0.0)).r,
-         texture(uWave, uv + vec2(0.0, t.y)).r - texture(uWave, uv - vec2(0.0, t.y)).r);
-
-  // ripples are drawn as contour lines of the wave height (about one cell wide), so a bump reads
-  // as thin rings spreading outward rather than a filled patch; level water draws no line at all
-  const float SPACING = 0.3;
-  float lv = abs(h) / SPACING;
-  float dl = abs(fract(lv + 0.5) - 0.5) / max(length(grad) / SPACING, 1e-3); // cells to the contour
-  float ring = (1.0 - smoothstep(0.45, 1.2, dl)) * smoothstep(0.5, 1.0, lv) * clamp(abs(h), 0.0, 1.0);
-
-  // resting lattice: a checkerboard on the 1:1.72 cell grid is very nearly hexagonal; it breathes
-  // with a slow two-octave drift so it is mostly barely there
-  bool lattice = mod(cell.x + cell.y, 2.0) < 0.5;
-  vec2 q = cell * vec2(1.0, 1.72);
-  float n = 0.65 * vnoise(q * 0.045 + vec2(0.05, 0.02) * uTime)
-          + 0.35 * vnoise(q * 0.11 - vec2(0.03, -0.06) * uTime);
-  float rest = smoothstep(0.3, 0.8, n);
-
-  float a = uField.z * ring;
-  if (lattice) a += uField.x * (0.2 + 0.8 * rest);
-  else a *= smoothstep(0.35, 0.7, ring);
-  if (a < 0.004) return;
-  float idx = ring > 0.9 ? uFieldIdx.z : (ring > 0.6 ? uFieldIdx.y : uFieldIdx.x);
-  // a little refraction: dots shift down the slope, as if seen through the surface
-  vec2 o = clamp(grad * 0.5, -0.3, 0.3);
-  outColor = vec4(-(idx + 0.5 + o.x), 0.5 - 0.3 * ring, a, o.y);
+  vec2 q = cell * vec2(1.0, 1.72);               // cell widths, so blobs are not stretched
+  float T = uTime * BLOB_SPEED;
+  float n = 0.55 * vnoise(q * 0.030 + vec2(0.80, 0.45) * T)
+          + 0.30 * vnoise(q * 0.071 - vec2(0.50, -0.70) * T + 17.0)
+          + 0.15 * vnoise(q * 0.170 + vec2(0.60, 0.90) * T + 41.0);
+  // a broad, slower layer moves the threshold, so blobs swell and shrink in place, not only slide
+  float swell = vnoise(q * 0.012 + vec2(-0.30, 0.20) * T + 7.0) - 0.5;
+  // sparse blobs (threshold 0.58) with a short edge, so each reads as a solid patch
+  float lvl = smoothstep(0.58, 0.74, n + 0.22 * swell);
+  // no resting dot lattice any more: between blobs the background stays empty
+  if (lvl < 0.08) return;
+  float a = uField.z * (0.35 + 0.65 * lvl);
+  float idx = lvl > 0.6 ? uFieldIdx.z : (lvl > 0.25 ? uFieldIdx.y : uFieldIdx.x);
+  outColor = vec4(-(idx + 0.5), 0.5 - 0.3 * lvl, min(a, 1.0), 0.0);
 }
 `;
 }

@@ -21,7 +21,7 @@ const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // GoatCounter (visitor map): production only, and only once a site code is set in src/data/site.ts
 const goat = import.meta.env.PROD && site.goatcounter.trim() ? `https://${site.goatcounter.trim()}.goatcounter.com/count` : '';
-const fallback = (specimens as Record<string, string>)[stage === 'academic' ? 'jellyfish' : stage === 'conference' ? 'dragonfly' : stage === 'dev' ? 'butterfly' : 'goldfish'] ?? '';
+const fallback = (specimens as Record<string, string>)[stage === 'academic' ? 'jellyfish' : stage === 'conference' ? 'goldfish' : stage === 'dev' ? 'butterfly' : 'goldfish'] ?? '';
 ---
 <!doctype html>
 <html lang="en" data-theme="light">
